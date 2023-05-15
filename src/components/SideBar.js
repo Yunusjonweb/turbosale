@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Praduct from "../pages/Dashboard/Praduct";
-import Praducts from "../pages/Dashboard/Praducts";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 import Login from "../pages/Auth/Login";
 import TuboSaleLogo from "../assets/TuboSaleLogo.png";
@@ -17,6 +16,7 @@ import ShopCard from "../pages/Dashboard/ShopCard";
 import Sales from "../pages/Sales/Sales";
 import AppContext from "antd/es/app/context";
 import Translations from "../pages/Dashboard/Translations";
+import Dashboard from "../pages/Dashboard/Dashboard";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
@@ -144,7 +144,7 @@ const SideBar = () => {
             >
               <ProductContext.Provider value={{ order, setOrder, addToBasket }}>
                 <Routes>
-                  <Route path="/dashboard" element={<Praducts />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/praducts" element={<Praduct />} />
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/login" element={<Login />} />
