@@ -12,7 +12,6 @@ import {
 } from "@ant-design/icons";
 import { ProductContainer } from "../../styles/components/PraductStyles";
 import { NavLink } from "react-router-dom";
-import EditModal from "../../modal/EditModal";
 import { useContext } from "react";
 import { AppContext } from "../../context/ContextProvider";
 const provinceData = ["Category", "Stol", "Kreslo", "Devan"];
@@ -20,11 +19,9 @@ const { Meta } = Card;
 
 export default function Praduct() {
   const [search, setSearch] = useState("");
-  const [modal2Open, setModal2Open] = useState(false);
   const { product, setProduct } = useContext(AppContext);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
-  const [selectedItem, setSelectedItem] = useState({});
 
   const numOfTotalPages = Math.ceil(product.length / todos);
   const pages = [...Array(current + 1).keys()].slice(1);
@@ -47,10 +44,6 @@ export default function Praduct() {
 
   const handleChange = (value) => {
     setTodos(value);
-  };
-
-  const handleToggle = () => {
-    return setModal2Open(!modal2Open);
   };
 
   const newFiltersUser = (id) => {
@@ -178,12 +171,6 @@ export default function Praduct() {
                       ({item?.quanty ? item?.quanty : 0})
                     </span>
                   </div>
-                  <img
-                    alt="example"
-                    src={item?.img}
-                    className="praducts_img"
-                    onClick={() => newFiltersUser(item?.id)}
-                  />
                 </Card>
               );
             }))
@@ -231,11 +218,6 @@ export default function Praduct() {
           ]}
         />
       </div>
-      <EditModal
-        modal2Open={modal2Open}
-        setModal2Open={handleToggle}
-        product={selectedItem}
-      />
     </ProductContainer>
   );
 }

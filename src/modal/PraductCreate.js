@@ -2,59 +2,70 @@ import React, { useContext, useState, useRef } from "react";
 import { Form, Input, Select, Modal } from "antd";
 import { PraductCreateContainer } from "../styles/components/PraductCreateStyles";
 import { AppContext } from "../context/ContextProvider";
-import { collection, addDoc } from "firebase/firestore";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  uploadBytes,
+  ref,
+  getDownloadURL,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { firestore, storage } from "../firebase/firebase";
+import { query, orderBy, limit } from "firebase/firestore";
 import User from "../assets/User.png";
 
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
   const [form] = Form.useForm();
-  const [img, setImg] = useState(null);
   const [url, setUrl] = useState(null);
   const inputRef = useRef(null);
   const { product, setProduct } = useContext(AppContext);
 
-  const handleClick = () => {
-    const imageRef = ref(storage, "image");
-    uploadBytes(imageRef, img).then(() => {
-      getDownloadURL(imageRef)
-        .then((url) => {
-          setUrl(url);
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+  const handleImagesChange = (e) => {
+    const file = e.target.files[0].name;
+    handleClick(file);
+  };
+
+  const handleClick = (file) => {
+    const storageRef = ref(storage, `images/${file}`);
+    uploadBytes(storageRef, file).then(() => {
+      getDownloadURL(storageRef).then((urls) => {
+        setUrl(urls);
+      });
     });
     inputRef.current.click();
   };
 
-  const handleImagesChange = (e) => {
-    setImg(e.target.files[0]);
+  const handleChange = (value) => {
+    const selectedCategory = value;
   };
 
   const onFinish = async () => {
     try {
       const docRef = await addDoc(collection(firestore, "product"), {
-        img: url,
         quanty: 0,
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJDzmwFYFG7Sa2b8yK2tiuLngAQZJrUse5d8BO2KZ80qwLvlUbSsf5-H5mIVaZOZ1OYSQ&usqp=CAU",
         ...form.getFieldsValue(),
       });
       setProduct((prevProduct) => [
         ...prevProduct,
         {
           ...form.getFieldsValue(),
+          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJDzmwFYFG7Sa2b8yK2tiuLngAQZJrUse5d8BO2KZ80qwLvlUbSsf5-H5mIVaZOZ1OYSQ&usqp=CAU",
           id: docRef.id,
-          quanty: 0,
-          img: url,
         },
       ]);
-      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
+
+    console.log(product);
+
     setOpen(false);
+    const products = collection(firestore, "product");
+    const q = await query(products, orderBy("name"), limit(5));
+    const docs = await getDocs(q);
+    console.log(docs.docs.map((doc) => doc.data()));
   };
 
   return (
@@ -81,6 +92,7 @@ export default function PraductCreate({ open, setOpen }) {
           >
             <div className="form">
               <Form.Item>
+                <img src={url} alt={"cbwhej"} />
                 <div onClick={handleClick}>
                   <img src={User} alt="rasim" className="profile_images" />
                   <input
@@ -118,9 +130,11 @@ export default function PraductCreate({ open, setOpen }) {
               <Form.Item label="Categoty">
                 <Select
                   showSearch
+                  onChange={handleChange}
                   style={{
                     width: 200,
                   }}
+                  name="selectedCategory"
                   placeholder="Search to Select"
                   optionFilterProp="children"
                   filterOption={(input, option) =>
@@ -133,27 +147,27 @@ export default function PraductCreate({ open, setOpen }) {
                   }
                   options={[
                     {
-                      value: "1",
+                      value: "Not Identified",
                       label: "Not Identified",
                     },
                     {
-                      value: "2",
+                      value: "Closed",
                       label: "Closed",
                     },
                     {
-                      value: "3",
+                      value: "Communicated",
                       label: "Communicated",
                     },
                     {
-                      value: "4",
+                      value: "Identified",
                       label: "Identified",
                     },
                     {
-                      value: "5",
+                      value: "Resolved",
                       label: "Resolved",
                     },
                     {
-                      value: "6",
+                      value: "Cancelled",
                       label: "Cancelled",
                     },
                   ]}

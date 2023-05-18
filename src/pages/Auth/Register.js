@@ -8,7 +8,7 @@ import { UserAuth } from "../../context/AuthContext";
 import { initial_values, SetNewUser } from "../../constants/constants";
 import LoginUser from "../../assets/LoginUser.png";
 import LoginLogo from "../../assets/LoginLogo.png";
-import { Google, Facebook } from "../../utils/Images";
+import { Google } from "../../utils/Images";
 import { RegisterContainer } from "../../styles/components/RegisterStyles";
 
 function Register() {
@@ -35,7 +35,6 @@ function Register() {
       SetNewUser(newUserDatas);
       navigate("/login");
     } catch (error) {
-      console.log(error);
       toast.error("Siz ro'yhatdan o'tolmadingiz!");
     }
   };
@@ -95,7 +94,6 @@ function Register() {
             <div className="register_line"></div>
             <div className="register_icons">
               <Google className="google" onClick={handleGoogleSignIn} />
-              <Facebook className="facebook" />
             </div>
             <div className="register_line"></div>
           </div>

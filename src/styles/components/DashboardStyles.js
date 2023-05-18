@@ -9,7 +9,7 @@ export const DashboardContainer = styled.div`
     height: 100px;
     border-radius: 10px;
     background-color: #fff;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 
   .card {
@@ -52,5 +52,31 @@ export const DashboardContainer = styled.div`
     width: 1px;
     height: 50px;
     background-color: #adb5bd;
+  }
+
+  .dashboard_charts {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 50px;
+  }
+
+  .charts_title {
+    margin: 10px;
+    color: #1c1c1c;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .charts_vertical,
+  .charts_simple {
+    width: 480px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background: #fff;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   }
 `;

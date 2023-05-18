@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCCBtpj_exw8SaQ5qTlhq73F7RubudBBCY",
-  authDomain: "turbosale-22420.firebaseapp.com",
-  projectId: "turbosale-22420",
-  storageBucket: "turbosale-22420.appspot.com",
-  messagingSenderId: "462960377401",
-  appId: "1:462960377401:web:e8f631004b4ab4209c97e8",
-  measurementId: "G-RWS13MRVPB",
+  apiKey: "AIzaSyA3wdiRWGDJBxbNDLj6k9256LR4y3FqvxE",
+  authDomain: "tubosale-12529.firebaseapp.com",
+  projectId: "tubosale-12529",
+  storageBucket: "tubosale-12529.appspot.com",
+  messagingSenderId: "588534453622",
+  appId: "1:588534453622:web:e18f3608daf3c9997e9657",
+  measurementId: "G-B9716F7GC8",
 };
 
 // Initialize Firebase

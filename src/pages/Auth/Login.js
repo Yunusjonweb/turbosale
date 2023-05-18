@@ -6,7 +6,7 @@ import { initial_values } from "../../constants/constants";
 import { Link, useNavigate } from "react-router-dom";
 import LoginUser from "../../assets/LoginUser.png";
 import LoginLogo from "../../assets/LoginLogo.png";
-import { Google, Facebook } from "../../utils/Images";
+import { Google } from "../../utils/Images";
 import { auth } from "../../firebase/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { LoginContainer } from "../../styles/components/LoginStyles";
@@ -100,7 +100,6 @@ function Login() {
             <div className="login_line"></div>
             <div className="login_icons">
               <Google className="google" onClick={handleGoogleSignIn} />
-              <Facebook className="facebook" />
             </div>
             <div className="login_line"></div>
           </div>

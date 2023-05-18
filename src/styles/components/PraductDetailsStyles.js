@@ -70,12 +70,40 @@ export const DetailsContainer = styled.div`
     color: #4b5563;
   }
 
-  .praductDetail_color {
+  .praductDetail_green {
     width: 50px;
     height: 50px;
     margin-top: 10px;
     border-radius: 5px;
+    cursor: pointer;
     background-color: #64d272;
+  }
+
+  .praductDetail_red {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: red;
+  }
+
+  .praductDetail_blue {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: blue;
+  }
+
+  .praductDetail_yellow {
+    width: 50px;
+    height: 50px;
+    margin-top: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: yellow;
   }
 
   .praductDetail_quantity {
@@ -94,7 +122,9 @@ export const DetailsContainer = styled.div`
   }
 
   .praductDetail_buy {
+    display: flex;
     float: right;
+    gap: 10px;
   }
 
   .return_btn {

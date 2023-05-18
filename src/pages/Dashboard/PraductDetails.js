@@ -1,19 +1,29 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "antd";
-import {
-  ArrowLeftOutlined,
-  DeleteOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { DetailsContainer } from "../../styles/components/PraductDetailsStyles";
 import { ProductContext } from "../../context/ProductContext";
+import EditModal from "../../modal/EditModal";
+import { deleteDoc, doc } from "firebase/firestore";
+import { firestore } from "../../firebase/firebase";
 
-export default function PraductDetails({ deletItem }) {
+export default function PraductDetails() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
+  const [modal2Open, setModal2Open] = useState(false);
   const { addToBasket } = useContext(ProductContext);
   const newUsers = JSON.parse(localStorage.getItem("newUsers"));
+
+  const colorArr = ["#FF0000", "#09203f", "#ffdd3c"];
+
+  const deleteItem = async (userId) => {
+    await deleteDoc(doc(firestore, "product", userId));
+  };
+
+  useEffect(() => {
+    deleteItem(newUsers);
+  }, []);
 
   return (
     <DetailsContainer>
@@ -40,15 +50,20 @@ export default function PraductDetails({ deletItem }) {
               <div className="praductDetail_card">
                 <div className="praductDetail_card_color">
                   <p>Rangi</p>
-                  <div className="praductDetail_color"></div>
+                  <div className="praductDetail_green"></div>
                 </div>
                 <div className="praductDetail_card_color">
                   <p>Supplier</p>
-                  <div className="praductDetail_color"></div>
+                  <div className="praductDetail_yellow"></div>
                 </div>
               </div>
               <div className="praductDetail_quantity">
-                <div className="praductDetail_quantity_title">Miqdori</div>
+                <div
+                  className="praductDetail_quantity_title"
+                  style={{ color: colorArr ? colorArr[0] : colorArr[1] }}
+                >
+                  Miqdori
+                </div>
                 <div className="praductDetail_quantity_button">
                   <Button>10000</Button>
                   <Button>20000</Button>
@@ -58,10 +73,12 @@ export default function PraductDetails({ deletItem }) {
                 </div>
               </div>
               <div className="praductDetail_buy">
-                <Button>
-                  <EditOutlined /> Edit
-                </Button>
-                <Button onClick={() => deletItem(item.id)}>
+                <EditModal
+                  modal2Open={modal2Open}
+                  setModal2Open={setModal2Open}
+                  id={item.id}
+                />
+                <Button onClick={() => deleteItem(item.id)}>
                   <DeleteOutlined /> Delete
                 </Button>
                 <Button

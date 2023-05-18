@@ -1,35 +1,29 @@
-import { Modal, Form, Input } from "antd";
-import { useEffect, useState } from "react";
-import { v4 } from "uuid";
-import { useContext } from "react";
+import { EditOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, Button } from "antd";
+import { useContext, useEffect } from "react";
 import { AppContext } from "../context/ContextProvider";
+import { UpdateData } from "./Update";
 
-export default function EditModal({ modal2Open, setModal2Open, product }) {
-  const { data, setData } = useContext(AppContext);
-  const [edit, setEdit] = useState([]);
-
+export default function EditModal({ modal2Open, setModal2Open, id }) {
+  const { product, setProduct } = useContext(AppContext);
   const [form] = Form.useForm();
+  const name = Form.useWatch("name", form);
+  const price = Form.useWatch("orginalPrice", form);
+  const sale = Form.useWatch("salePrice", form);
+  const quantity = Form.useWatch("quantity", form);
+  const textArea = Form.useWatch("textArea", form);
 
-  useEffect(() => {
-    form.setFieldValue({
-      name: product.name,
-      orginalPrice: product.orginalPrice,
-      salePrice: product.salePrice,
-      quantity: product.quantity,
-      textArea: product.textArea,
-    });
-  }, [product]);
+  const handleCancel = () => {
+    setModal2Open(false);
+  };
 
   const onFinish = () => {
-    const editData = {
-      id: v4(),
-      quanty: 0,
-      img: "https://t4.ftcdn.net/jpg/02/82/06/43/360_F_282064304_6KPa8Kpm8W80tOOVZ31Lq3562IDBf3Sc.jpg",
-      ...form.getFieldsValue(),
-    };
-    const editFilter = data.filter((item) => item.id === product);
-    console.log(editFilter);
-    setData([...editFilter, editData]);
+    UpdateData(name, price, sale, quantity, textArea, id);
+    setModal2Open(false);
+  };
+
+  const showModal = () => {
+    setModal2Open(true);
   };
 
   return (
@@ -39,7 +33,7 @@ export default function EditModal({ modal2Open, setModal2Open, product }) {
         centered
         open={modal2Open}
         onOk={() => onFinish()}
-        onCancel={() => setModal2Open(false)}
+        onCancel={() => handleCancel()}
         okText="Saqlash"
         cancelText="Bekor qilish"
       >
@@ -48,13 +42,6 @@ export default function EditModal({ modal2Open, setModal2Open, product }) {
           name="nest-messages"
           style={{
             maxWidth: 600,
-          }}
-          initialValues={{
-            name: product.name,
-            orginalPrice: product.orginalPrice,
-            salePrice: product.salePrice,
-            quantity: product.quantity,
-            textArea: product.textArea,
           }}
           form={form}
         >
@@ -75,6 +62,9 @@ export default function EditModal({ modal2Open, setModal2Open, product }) {
           </Form.Item>
         </Form>
       </Modal>
+      <Button onClick={showModal}>
+        <EditOutlined /> Edit
+      </Button>
     </div>
   );
 }

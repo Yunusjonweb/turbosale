@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Landing/Home";
 import About from "./pages/Landing/About";
@@ -19,19 +19,21 @@ function App() {
 
   const colRef = collection(firestore, "product");
 
-  getDocs(colRef)
-    .then((snapshot) => {
-      let product = [];
-      snapshot.forEach((item) => {
-        product.push({ ...item.data(), id: item.id });
+  useEffect(() => {
+    getDocs(colRef)
+      .then((snapshot) => {
+        let product = [];
+        snapshot.forEach((item) => {
+          product.push({ ...item.data(), id: item.id });
+        });
+        setProduct(product);
+      })
+      .catch((err) => {
+        console.log(err.message);
       });
-      setProduct(product);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
 
-  onSnapshot(colRef);
+    onSnapshot(colRef);
+  }, []);
 
   if (!dataUsers.token) {
     return (

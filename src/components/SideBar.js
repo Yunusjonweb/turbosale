@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Praduct from "../pages/Dashboard/Praduct";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
@@ -14,8 +14,6 @@ import { ProductContext } from "../context/ProductContext";
 import { AppstoreAddOutlined } from "@ant-design/icons";
 import ShopCard from "../pages/Dashboard/ShopCard";
 import Sales from "../pages/Sales/Sales";
-import AppContext from "antd/es/app/context";
-import Translations from "../pages/Dashboard/Translations";
 import Dashboard from "../pages/Dashboard/Dashboard";
 const { Header, Content, Sider } = Layout;
 
@@ -23,7 +21,6 @@ const SideBar = () => {
   const { pathname } = useLocation();
   const [order, setOrder] = useState([]);
   const [open, setOpen] = useState(false);
-  const { data, setData } = useContext(AppContext);
   const str = pathname.slice();
   let result = str.charAt(1).toUpperCase() + str.slice(2);
   const {
@@ -74,10 +71,12 @@ const SideBar = () => {
     }
   };
 
-  const deletItem = (id) => {
-    const filteredUsers = data.filter((user) => user.id !== id);
-    setData(filteredUsers);
-  };
+  // const deletItem = (id) => {
+  //   const filteredUsers = data.filter((user) => user.id !== id);
+  //   setData(filteredUsers);
+  // };
+
+  console.log("product");
 
   return (
     <SidebarContainer>
@@ -148,12 +147,8 @@ const SideBar = () => {
                   <Route path="/praducts" element={<Praduct />} />
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/login" element={<Login />} />
-                  <Route
-                    path="/details/:userId"
-                    element={<PraductDetails deletItem={deletItem} />}
-                  />
+                  <Route path="/details/:userId" element={<PraductDetails />} />
                   <Route path="/basket" element={<ShopCard />} />
-                  <Route path="/trans" element={<Translations />} />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>
               </ProductContext.Provider>
