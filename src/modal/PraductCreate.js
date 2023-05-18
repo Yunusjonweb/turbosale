@@ -16,6 +16,7 @@ import User from "../assets/User.png";
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
+  const [selectValue, setSelectValue] = useState(null);
   const [form] = Form.useForm();
   const [url, setUrl] = useState(null);
   const inputRef = useRef(null);
@@ -36,14 +37,11 @@ export default function PraductCreate({ open, setOpen }) {
     inputRef.current.click();
   };
 
-  const handleChange = (value) => {
-    const selectedCategory = value;
-  };
-
   const onFinish = async () => {
     try {
       const docRef = await addDoc(collection(firestore, "product"), {
         quanty: 0,
+        select: selectValue,
         img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJDzmwFYFG7Sa2b8yK2tiuLngAQZJrUse5d8BO2KZ80qwLvlUbSsf5-H5mIVaZOZ1OYSQ&usqp=CAU",
         ...form.getFieldsValue(),
       });
@@ -92,7 +90,6 @@ export default function PraductCreate({ open, setOpen }) {
           >
             <div className="form">
               <Form.Item>
-                <img src={url} alt={"cbwhej"} />
                 <div onClick={handleClick}>
                   <img src={User} alt="rasim" className="profile_images" />
                   <input
@@ -130,7 +127,7 @@ export default function PraductCreate({ open, setOpen }) {
               <Form.Item label="Categoty">
                 <Select
                   showSearch
-                  onChange={handleChange}
+                  onChange={(value) => setSelectValue(value)}
                   style={{
                     width: 200,
                   }}
@@ -147,28 +144,24 @@ export default function PraductCreate({ open, setOpen }) {
                   }
                   options={[
                     {
-                      value: "Not Identified",
-                      label: "Not Identified",
+                      value: "Devan",
+                      label: "Devan",
                     },
                     {
-                      value: "Closed",
-                      label: "Closed",
+                      value: "Kreslo",
+                      label: "Kreslo",
                     },
                     {
-                      value: "Communicated",
-                      label: "Communicated",
+                      value: "Xontaxta",
+                      label: "Xontaxta",
                     },
                     {
-                      value: "Identified",
-                      label: "Identified",
+                      value: "Stol",
+                      label: "Stol",
                     },
                     {
-                      value: "Resolved",
-                      label: "Resolved",
-                    },
-                    {
-                      value: "Cancelled",
-                      label: "Cancelled",
+                      value: "Shkaf",
+                      label: "Shkaf",
                     },
                   ]}
                 />

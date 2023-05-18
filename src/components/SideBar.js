@@ -71,13 +71,6 @@ const SideBar = () => {
     }
   };
 
-  // const deletItem = (id) => {
-  //   const filteredUsers = data.filter((user) => user.id !== id);
-  //   setData(filteredUsers);
-  // };
-
-  console.log("product");
-
   return (
     <SidebarContainer>
       <Layout>

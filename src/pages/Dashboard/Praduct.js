@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button, Input, Select } from "antd";
 import {
   MinusOutlined,
@@ -14,14 +14,19 @@ import { ProductContainer } from "../../styles/components/PraductStyles";
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { AppContext } from "../../context/ContextProvider";
-const provinceData = ["Category", "Stol", "Kreslo", "Devan"];
+const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
 const { Meta } = Card;
 
 export default function Praduct() {
   const [search, setSearch] = useState("");
   const { product, setProduct } = useContext(AppContext);
+  const [filters, setFilter] = useState([]);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
+
+  useEffect(() => {
+    setFilter(product);
+  }, [product]);
 
   const numOfTotalPages = Math.ceil(product.length / todos);
   const pages = [...Array(current + 1).keys()].slice(1);
@@ -82,6 +87,13 @@ export default function Praduct() {
     setProduct(userDatas);
   };
 
+  const CategoryFilter = (value) => {
+    const productFilter = product.filter(
+      (item) => item.name.toLowerCase() === value.toLowerCase()
+    );
+    setFilter(productFilter);
+  };
+
   return (
     <ProductContainer>
       <div className="praducts_form">
@@ -101,6 +113,7 @@ export default function Praduct() {
             <FilterOutlined />
           </Button>
           <Select
+            onChange={(value) => CategoryFilter(value)}
             defaultValue={provinceData[0]}
             style={{
               width: 120,
@@ -118,7 +131,7 @@ export default function Praduct() {
       <div className="praducts">
         {
           (visiblePages?.length,
-          visiblePages
+          filters
             .filter((item) =>
               item.name.toLowerCase().includes(search.toLowerCase())
             )
