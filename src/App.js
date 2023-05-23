@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./pages/Landing/Home";
 import About from "./pages/Landing/About";
 import Contact from "./pages/Landing/Contact";
@@ -12,12 +12,28 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import { firestore } from "./firebase/firebase";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
+  const navigate = useNavigate();
   const dataUsers = JSON.parse(localStorage.getItem("userData"));
   const [product, setProduct] = useState([]);
 
-  const colRef = collection(firestore, "product");
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+
+  const colRef = collection(firestore, `${userEmail.email}.product`);
+
+  useEffect(() => {
+    const auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user.uid) {
+        const uid = user.email.toString();
+      } else {
+        console.log("ole");
+        navigate("/register");
+      }
+    });
+  }, []);
 
   useEffect(() => {
     getDocs(colRef)
@@ -31,7 +47,6 @@ function App() {
       .catch((err) => {
         console.log(err.message);
       });
-
     onSnapshot(colRef);
   }, []);
 

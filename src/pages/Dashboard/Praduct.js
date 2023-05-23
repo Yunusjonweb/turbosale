@@ -9,24 +9,39 @@ import {
   SearchOutlined,
   LeftOutlined,
   RightOutlined,
+  DeleteOutlined,
 } from "@ant-design/icons";
-import { ProductContainer } from "../../styles/components/PraductStyles";
-import { NavLink } from "react-router-dom";
 import { useContext } from "react";
+import { NavLink } from "react-router-dom";
+import Loader from "../../components/Loader";
+import { firestore } from "../../firebase/firebase";
 import { AppContext } from "../../context/ContextProvider";
-const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
+import { ProductContainer } from "../../styles/components/PraductStyles";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 const { Meta } = Card;
+const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
 
 export default function Praduct() {
   const [search, setSearch] = useState("");
-  const { product, setProduct } = useContext(AppContext);
   const [filters, setFilter] = useState([]);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
+  const { product, setProduct } = useContext(AppContext);
+  const loader = [];
 
   useEffect(() => {
     setFilter(product);
   }, [product]);
+
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+
+  const productSort = async () => {
+    const products = collection(firestore, `${userEmail.email}.product`);
+    const q = await query(products, orderBy("name"), limit(6));
+    const docs = await getDocs(q);
+    const productSort = docs.docs.map((doc) => doc.data());
+    setProduct(productSort);
+  };
 
   const numOfTotalPages = Math.ceil(product.length / todos);
   const pages = [...Array(current + 1).keys()].slice(1);
@@ -49,11 +64,6 @@ export default function Praduct() {
 
   const handleChange = (value) => {
     setTodos(value);
-  };
-
-  const newFiltersUser = (id) => {
-    const newUsers = product.filter((item) => item.id === id);
-    localStorage.setItem("newUsers", JSON.stringify(newUsers));
   };
 
   const plusHandle = (users) => {
@@ -88,10 +98,12 @@ export default function Praduct() {
   };
 
   const CategoryFilter = (value) => {
-    const productFilter = product.filter(
-      (item) => item.name.toLowerCase() === value.toLowerCase()
-    );
-    setFilter(productFilter);
+    if (value === "All") {
+      return setFilter(product);
+    } else {
+      const productFilter = product.filter((item) => item.select === value);
+      setFilter(productFilter);
+    }
   };
 
   return (
@@ -106,7 +118,7 @@ export default function Praduct() {
           />
         </div>
         <div className="praducts_btns">
-          <Button>
+          <Button onClick={() => productSort()}>
             <SortAscendingOutlined />
           </Button>
           <Button>
@@ -129,7 +141,7 @@ export default function Praduct() {
         </div>
       </div>
       <div className="praducts">
-        {
+        {filters.length ? (
           (visiblePages?.length,
           filters
             .filter((item) =>
@@ -151,7 +163,6 @@ export default function Praduct() {
                         alt="example"
                         src={item?.img}
                         className="praducts_img"
-                        onClick={() => newFiltersUser(item?.id)}
                       />
                     </NavLink>
                   }
@@ -187,7 +198,9 @@ export default function Praduct() {
                 </Card>
               );
             }))
-        }
+        ) : (
+          <Loader />
+        )}
       </div>
       <div className="pagination">
         <Button className="papagination_btn" onClick={() => prevHandlerPage()}>

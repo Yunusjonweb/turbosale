@@ -1,4 +1,5 @@
-import { Space, Table, Tag } from "antd";
+import { Table, Tag } from "antd";
+
 const columns = [
   {
     title: "Ism",
@@ -47,6 +48,7 @@ const columns = [
     ),
   },
 ];
+
 const data = [
   {
     key: "1",
@@ -70,5 +72,8 @@ const data = [
     tags: ["cool", "teacher"],
   },
 ];
-const Sales = () => <Table columns={columns} dataSource={data} />;
+
+const Sales = () => {
+  return <Table columns={columns} dataSource={data} />;
+};
 export default Sales;

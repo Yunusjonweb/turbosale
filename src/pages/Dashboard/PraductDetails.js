@@ -1,34 +1,56 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Button } from "antd";
-import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../context/ContextProvider";
+import { useNavigate, useParams } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import { DetailsContainer } from "../../styles/components/PraductDetailsStyles";
-import { ProductContext } from "../../context/ProductContext";
+import { Button, message, Popconfirm } from "antd";
 import EditModal from "../../modal/EditModal";
 import { deleteDoc, doc } from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
+import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
+import { ProductContext } from "../../context/ProductContext";
 
 export default function PraductDetails() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
   const [modal2Open, setModal2Open] = useState(false);
   const { addToBasket } = useContext(ProductContext);
-  const newUsers = JSON.parse(localStorage.getItem("newUsers"));
+  const { product, setProduct } = useContext(AppContext);
+  const { userId } = useParams();
 
-  const colorArr = ["#FF0000", "#09203f", "#ffdd3c"];
+  const thisProduct = product.filter((prod) => prod.id === userId);
+  console.log(thisProduct);
+
+  let dateObj = new Date();
+  let month =
+    dateObj.getUTCMonth() + 1 < 10
+      ? "0" + dateObj.getUTCMonth()
+      : dateObj.getUTCMonth(); //months from 1-12
+  let day =
+    dateObj.getUTCDate() < 10
+      ? "0" + dateObj.getUTCDate()
+      : dateObj.getUTCDate();
+  let year = dateObj.getUTCFullYear();
+
+  const nowdate = day + "." + month + "." + year;
 
   const deleteItem = async (userId) => {
-    await deleteDoc(doc(firestore, "product", userId));
+    // const yunus = await deleteDoc(
+    //   doc(firestore, `${userEmail.email}.product`, userId)
+    // );
+    // console.log(yunus);
+    const yunus = product.filter((item) => item.id !== userId);
+    setProduct(yunus);
+    navigate("/praducts");
   };
 
-  useEffect(() => {
-    deleteItem(newUsers);
-  }, []);
+  const cancel = (e) => {
+    message.error("Click on No");
+  };
 
   return (
     <DetailsContainer>
       <div className="praductDetails">
-        {newUsers.map((item) => (
+        {thisProduct.map((item) => (
           <div className="praductDetail">
             <div className="praductDetails_img">
               <img
@@ -50,7 +72,6 @@ export default function PraductDetails() {
               <div className="praductDetail_card">
                 <div className="praductDetail_card_color">
                   <p>Rangi</p>
-                  <div className="praductDetail_green"></div>
                 </div>
                 <div className="praductDetail_card_color">
                   <p>Supplier</p>
@@ -58,12 +79,7 @@ export default function PraductDetails() {
                 </div>
               </div>
               <div className="praductDetail_quantity">
-                <div
-                  className="praductDetail_quantity_title"
-                  style={{ color: colorArr ? colorArr[0] : colorArr[1] }}
-                >
-                  Miqdori
-                </div>
+                <div className="praductDetail_quantity_title">Miqdori</div>
                 <div className="praductDetail_quantity_button">
                   <Button>10000</Button>
                   <Button>20000</Button>
@@ -78,9 +94,18 @@ export default function PraductDetails() {
                   setModal2Open={setModal2Open}
                   id={item.id}
                 />
-                <Button onClick={() => deleteItem(item.id)}>
-                  <DeleteOutlined /> Delete
-                </Button>
+                <Popconfirm
+                  title="Delete the product"
+                  description="Are you sure to delete this product?"
+                  onConfirm={() => deleteItem(item.id)}
+                  onCancel={cancel}
+                  okText="Yes"
+                  cancelText="No"
+                >
+                  <Button>
+                    <DeleteOutlined /> Delete
+                  </Button>
+                </Popconfirm>
                 <Button
                   type="primary"
                   size={"middle"}
@@ -91,6 +116,7 @@ export default function PraductDetails() {
                       name: item.name,
                       quantity: item.quantity,
                       orginalPrice: item.orginalPrice,
+                      date: nowdate,
                     })
                   }
                 >

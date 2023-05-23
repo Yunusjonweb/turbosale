@@ -3,7 +3,8 @@ import { firestore } from "../firebase/firebase";
 
 export async function UpdateData(name, price, sale, quantity, textArea, id) {
   console.log(name, price, id);
-  const praduct = doc(firestore, "product", id);
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+  const praduct = doc(firestore, `${userEmail.email}product`, id);
   await updateDoc(praduct, {
     name: name,
     price: price,

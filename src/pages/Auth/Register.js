@@ -26,10 +26,10 @@ function Register() {
         email: email,
         password: password,
       };
-      console.log(newUserDatas);
       createUserWithEmailAndPassword(auth, email, password).then((res) => {
         console.log(res.user);
       });
+      localStorage.setItem("userEmail", JSON.stringify(newUserDatas));
       toast.success("Siz muvofaqiyatliy ro'yhatdan o'tdingiz!");
       localStorage.setItem("userData", JSON.stringify(newUserDatas));
       SetNewUser(newUserDatas);

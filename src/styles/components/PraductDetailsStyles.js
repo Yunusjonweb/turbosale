@@ -53,57 +53,25 @@ export const DetailsContainer = styled.div`
   }
 
   .praductDetail_card {
+    width: 400px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: start;
     gap: 20px;
   }
 
-  .praductDetail_card_color {
-    width: 50px;
-    height: 50px;
-    margin: 10px;
+  .praduct_cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    gap: 20px;
   }
 
   .praductDetail_card_color p {
     font-size: 16px;
     color: #4b5563;
-  }
-
-  .praductDetail_green {
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: #64d272;
-  }
-
-  .praductDetail_red {
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: red;
-  }
-
-  .praductDetail_blue {
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: blue;
-  }
-
-  .praductDetail_yellow {
-    width: 50px;
-    height: 50px;
-    margin-top: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: yellow;
   }
 
   .praductDetail_quantity {

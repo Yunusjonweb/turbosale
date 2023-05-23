@@ -3,12 +3,7 @@ import { Form, Input, Select, Modal } from "antd";
 import { PraductCreateContainer } from "../styles/components/PraductCreateStyles";
 import { AppContext } from "../context/ContextProvider";
 import { collection, addDoc, getDocs } from "firebase/firestore";
-import {
-  uploadBytes,
-  ref,
-  getDownloadURL,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { firestore, storage } from "../firebase/firebase";
 import { query, orderBy, limit } from "firebase/firestore";
 import User from "../assets/User.png";
@@ -19,11 +14,13 @@ export default function PraductCreate({ open, setOpen }) {
   const [selectValue, setSelectValue] = useState(null);
   const [form] = Form.useForm();
   const [url, setUrl] = useState(null);
+  const { setProduct } = useContext(AppContext);
   const inputRef = useRef(null);
-  const { product, setProduct } = useContext(AppContext);
 
   const handleImagesChange = (e) => {
-    const file = e.target.files[0].name;
+    const file = e.target.files[0];
+    const url = URL.createObjectURL(file);
+    setUrl(url);
     handleClick(file);
   };
 
@@ -37,33 +34,31 @@ export default function PraductCreate({ open, setOpen }) {
     inputRef.current.click();
   };
 
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+
   const onFinish = async () => {
     try {
-      const docRef = await addDoc(collection(firestore, "product"), {
-        quanty: 0,
-        select: selectValue,
-        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJDzmwFYFG7Sa2b8yK2tiuLngAQZJrUse5d8BO2KZ80qwLvlUbSsf5-H5mIVaZOZ1OYSQ&usqp=CAU",
-        ...form.getFieldsValue(),
-      });
+      const docRef = await addDoc(
+        collection(firestore, `${userEmail.email}.product`),
+        {
+          quanty: 0,
+          select: selectValue,
+          img: url,
+          ...form.getFieldsValue(),
+        }
+      );
       setProduct((prevProduct) => [
         ...prevProduct,
         {
           ...form.getFieldsValue(),
-          img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJDzmwFYFG7Sa2b8yK2tiuLngAQZJrUse5d8BO2KZ80qwLvlUbSsf5-H5mIVaZOZ1OYSQ&usqp=CAU",
+          img: url,
           id: docRef.id,
         },
       ]);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
-
-    console.log(product);
-
     setOpen(false);
-    const products = collection(firestore, "product");
-    const q = await query(products, orderBy("name"), limit(5));
-    const docs = await getDocs(q);
-    console.log(docs.docs.map((doc) => doc.data()));
   };
 
   return (

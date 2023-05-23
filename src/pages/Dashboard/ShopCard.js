@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
-import { Button, Popconfirm } from "antd";
+import { Button, Table } from "antd";
 import { useNavigate } from "react-router-dom";
-import { DeleteOutlined, ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { ShopCardContainer } from "../../styles/components/ShopCardStyles";
 import { ProductContext } from "../../context/ProductContext";
-import { toast } from "react-toastify";
+import { ShopCardData } from "../../data/ShopCardData";
 
 export default function ShopCard() {
   const { order, setOrder } = useContext(ProductContext);
@@ -103,23 +103,16 @@ export default function ShopCard() {
     setOrder(userDatas);
   };
 
-  const totalPrice = order.reduce((sum, el) => {
-    return sum + (el.orginalPrice * el.quanty) / el.quanty;
-  }, 0);
-
   const deletItem = (item) => {
     const filteredUsers = order.filter((user) => user.id !== item.id);
     setOrder(filteredUsers);
   };
 
-  let numberingPrice = totalPrice
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
   return (
     <ShopCardContainer>
       <div className="shopCard_section">
-        <div className="shopCard_card">
+        <Table columns={ShopCardData} dataSource={order} />
+        {/* <div className="shopCard_card">
           {order.map((item) => (
             <div className="shopCard_data">
               <img src={item.img} alt={item.name} className="shopCard_img" />
@@ -157,12 +150,13 @@ export default function ShopCard() {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
-      <Button type={"ghost"} className="return_btn" onClick={goBack}>
-        <ArrowLeftOutlined />
-        Qaytish
-      </Button>
+        <Button type={"ghost"} className="return_btn" onClick={goBack}>
+          <ArrowLeftOutlined />
+          Qaytish
+        </Button>
+      </div>
     </ShopCardContainer>
   );
 }

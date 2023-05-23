@@ -17,13 +17,11 @@ export const initial_values = {
 
 export async function SetNewUser(userData) {
   const { email, password } = userData;
-  console.log(email, password);
   try {
     const docRef = await setDoc(doc(firestore, "users", email), {
       email: email,
       password: password,
     });
-    console.log(docRef.id);
   } catch (err) {
     console.log(err);
   }
