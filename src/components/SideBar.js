@@ -17,6 +17,7 @@ import Sales from "../pages/Sales/Sales";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Clients from "../pages/Dashboard/Clients/Clients";
 import Order from "../pages/Dashboard/Order/Order";
+import Supplier from "../pages/Dashboard/Supplier/Supplier";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
@@ -143,6 +144,7 @@ const SideBar = () => {
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/clients" element={<Clients />} />
                   <Route path="/order" element={<Order />} />
+                  <Route path="/supplier" element={<Supplier />} />
                   <Route path="/details/:userId" element={<PraductDetails />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/basket" element={<ShopCard />} />

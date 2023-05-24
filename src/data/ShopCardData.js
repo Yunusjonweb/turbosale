@@ -1,9 +1,9 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-export const ShopCardData = [
+export const ShopCardData = (plusHandler, minusHandle, separatePrice) => [
   {
-    title: "Product img",
+    title: "Product name",
     dataIndex: "name",
     key: "name",
   },
@@ -14,14 +14,35 @@ export const ShopCardData = [
   },
   {
     title: "Add",
-    dataIndex: "quanty",
-    key: "quanty",
-    render: () => <Button>+</Button>,
+    dataIndex: "id",
+    key: "id",
+    render: (_, record) => (
+      <div
+        className="btn_quanty"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
+        <Button onClick={() => minusHandle(record?.id)}>-</Button>
+        <p>{record?.quanty}</p>
+        <Button onClick={() => plusHandler(record?.id)}>+</Button>
+      </div>
+    ),
   },
   {
     title: "Total Price",
-    dataIndex: "address",
-    key: "address",
+    key: "quanty",
+    render: (_, record) => (
+      <p>
+        {record
+          ? ((record?.orginalPrice * record?.quanty) / record?.prosent)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "USD"
+          : null}
+      </p>
+    ),
   },
   {
     title: "Sana",

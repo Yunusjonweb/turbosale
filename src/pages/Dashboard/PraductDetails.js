@@ -13,6 +13,7 @@ export default function PraductDetails() {
   const [modal2Open, setModal2Open] = useState(false);
   const { addToBasket } = useContext(ProductContext);
   const { product, setProduct } = useContext(AppContext);
+  const { order, setOrder } = useContext(ProductContext);
   const { userId } = useParams();
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
@@ -112,6 +113,7 @@ export default function PraductDetails() {
                       id: item.id,
                       img: item.img,
                       name: item.name,
+                      prosent: item.prosent,
                       quantity: item.quantity,
                       email: userEmail.email,
                       orginalPrice: item.orginalPrice,

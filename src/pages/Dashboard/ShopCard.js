@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -10,6 +10,8 @@ export default function ShopCard() {
   const { order, setOrder } = useContext(ProductContext);
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
+
+  const [product, setProduct] = useState([]);
 
   // const api = {
   //   baseurl: "https://islomapi.uz/api/present/",
@@ -103,55 +105,13 @@ export default function ShopCard() {
     setOrder(userDatas);
   };
 
-  const deletItem = (item) => {
-    const filteredUsers = order.filter((user) => user.id !== item.id);
-    setOrder(filteredUsers);
-  };
-
   return (
     <ShopCardContainer>
       <div className="shopCard_section">
-        <Table columns={ShopCardData} dataSource={order} />
-        {/* <div className="shopCard_card">
-          {order.map((item) => (
-            <div className="shopCard_data">
-              <img src={item.img} alt={item.name} className="shopCard_img" />
-              <p className="shopCard_title">{item.name}</p>
-              <p className="shopCard_price">
-                {item.orginalPrice ? item.orginalPrice + "usz" : null}
-              </p>
-              <p className="shopCard_totalPrice">
-                {numberingPrice ? numberingPrice + "usz" : null}
-              </p>
-              <p className="shopCard_quantity">{item.quanty}</p>
-              <Button
-                className="shopCard_inc"
-                onClick={() => minusHandle(item?.id)}
-              >
-                -
-              </Button>
-              <Button
-                className="shopCard_dec"
-                onClick={() => plusHandle(item?.id)}
-              >
-                +
-              </Button>
-              <Popconfirm
-                title="Delete the product"
-                description="Are you sure to delete this product?"
-                okText="Yes"
-                cancelText="No"
-                onConfirm={() => deletItem(item)}
-              >
-                <Button>
-                  <DeleteOutlined /> Delete
-                </Button>
-              </Popconfirm>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
+        <Table
+          columns={ShopCardData(plusHandle, minusHandle)}
+          dataSource={order}
+        />
         <Button type={"ghost"} className="return_btn" onClick={goBack}>
           <ArrowLeftOutlined />
           Qaytish

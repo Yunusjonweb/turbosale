@@ -24,7 +24,6 @@ import {
   query,
   where,
 } from "firebase/firestore";
-import { async } from "@firebase/util";
 const { Meta } = Card;
 const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
 
