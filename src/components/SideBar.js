@@ -16,6 +16,7 @@ import ShopCard from "../pages/Dashboard/ShopCard";
 import Sales from "../pages/Sales/Sales";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Clients from "../pages/Dashboard/Clients/Clients";
+import Order from "../pages/Dashboard/Order/Order";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
@@ -50,9 +51,7 @@ const SideBar = () => {
   };
 
   const addToBasket = (item) => {
-    console.log(item);
     const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
-    console.log(itemIndex);
     if (itemIndex < 0) {
       const newItem = {
         ...item,
@@ -143,6 +142,7 @@ const SideBar = () => {
                   <Route path="/praducts" element={<Praduct />} />
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/clients" element={<Clients />} />
+                  <Route path="/order" element={<Order />} />
                   <Route path="/details/:userId" element={<PraductDetails />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/basket" element={<ShopCard />} />

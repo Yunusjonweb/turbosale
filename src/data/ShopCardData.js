@@ -1,4 +1,4 @@
-import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
 export const ShopCardData = [

@@ -4,8 +4,6 @@ import React, { useContext, useState } from "react";
 import { DetailsContainer } from "../../styles/components/PraductDetailsStyles";
 import { Button, message, Popconfirm } from "antd";
 import EditModal from "../../modal/EditModal";
-import { deleteDoc, doc } from "firebase/firestore";
-import { firestore } from "../../firebase/firebase";
 import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ProductContext } from "../../context/ProductContext";
 
@@ -17,8 +15,8 @@ export default function PraductDetails() {
   const { product, setProduct } = useContext(AppContext);
   const { userId } = useParams();
 
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
   const thisProduct = product.filter((prod) => prod.id === userId);
-  console.log(thisProduct);
 
   let dateObj = new Date();
   let month =
@@ -115,6 +113,7 @@ export default function PraductDetails() {
                       img: item.img,
                       name: item.name,
                       quantity: item.quantity,
+                      email: userEmail.email,
                       orginalPrice: item.orginalPrice,
                       date: nowdate,
                     })

@@ -1,79 +1,11 @@
-import { Table, Tag } from "antd";
-
-const columns = [
-  {
-    title: "Ism",
-    dataIndex: "name",
-    key: "ism",
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Telefon",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Summa",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "To’lov turi",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Sana",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Holat",
-    key: "tags",
-    dataIndex: "tags",
-    render: (_, { tags }) => (
-      <>
-        {tags.map((tag) => {
-          let color = tag.length > 5 ? "geekblue" : "green";
-          if (tag === "loser") {
-            color = "volcano";
-          }
-          return (
-            <Tag color={color} key={tag}>
-              {tag.toUpperCase()}
-            </Tag>
-          );
-        })}
-      </>
-    ),
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-    tags: ["nice", "developer"],
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-    tags: ["loser"],
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-    tags: ["cool", "teacher"],
-  },
-];
+import { Table } from "antd";
+import { SalesColumnsData } from "../../data/SalesColumnsData";
+import { useContext } from "react";
+import { ProductContext } from "../../context/ProductContext";
 
 const Sales = () => {
-  return <Table columns={columns} dataSource={data} />;
+  const { order } = useContext(ProductContext);
+  console.log(order);
+  return <Table columns={SalesColumnsData} dataSource={order} />;
 };
 export default Sales;

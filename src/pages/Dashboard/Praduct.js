@@ -9,7 +9,6 @@ import {
   SearchOutlined,
   LeftOutlined,
   RightOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
@@ -17,7 +16,15 @@ import Loader from "../../components/Loader";
 import { firestore } from "../../firebase/firebase";
 import { AppContext } from "../../context/ContextProvider";
 import { ProductContainer } from "../../styles/components/PraductStyles";
-import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
+import { async } from "@firebase/util";
 const { Meta } = Card;
 const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
 
@@ -26,6 +33,7 @@ export default function Praduct() {
   const [filters, setFilter] = useState([]);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
+  const [last, setLast] = useState([]);
   const { product, setProduct } = useContext(AppContext);
   const loader = [];
 
@@ -106,6 +114,25 @@ export default function Praduct() {
     }
   };
 
+  const PriceFilter = async () => {
+    const citiesRef = collection(firestore, `${userEmail.email}.product`);
+    const q = query(
+      citiesRef,
+      where("orginalPrice", "===", 900),
+      orderBy("orginalPrice"),
+      limit(2)
+    );
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+
+  const LastAdded = () => {
+    const productLength = product[product.length - 1];
+    setLast(productLength);
+  };
+
   return (
     <ProductContainer>
       <div className="praducts_form">
@@ -121,7 +148,7 @@ export default function Praduct() {
           <Button onClick={() => productSort()}>
             <SortAscendingOutlined />
           </Button>
-          <Button>
+          <Button onClick={() => PriceFilter()}>
             <FilterOutlined />
           </Button>
           <Select
@@ -135,7 +162,7 @@ export default function Praduct() {
               value: province,
             }))}
           />
-          <Button>
+          <Button onClick={() => LastAdded()}>
             Last Added <ShrinkOutlined />
           </Button>
         </div>
