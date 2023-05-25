@@ -1,11 +1,13 @@
 import { AppContext } from "../../context/ContextProvider";
 import { useNavigate, useParams } from "react-router-dom";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DetailsContainer } from "../../styles/components/PraductDetailsStyles";
 import { Button, message, Popconfirm } from "antd";
 import EditModal from "../../modal/EditModal";
 import { ArrowLeftOutlined, DeleteOutlined } from "@ant-design/icons";
 import { ProductContext } from "../../context/ProductContext";
+import { deleteDoc, doc } from "firebase/firestore";
+import { firestore } from "../../firebase/firebase";
 
 export default function PraductDetails() {
   const navigate = useNavigate();
@@ -13,7 +15,6 @@ export default function PraductDetails() {
   const [modal2Open, setModal2Open] = useState(false);
   const { addToBasket } = useContext(ProductContext);
   const { product, setProduct } = useContext(AppContext);
-  const { order, setOrder } = useContext(ProductContext);
   const { userId } = useParams();
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
@@ -33,14 +34,14 @@ export default function PraductDetails() {
   const nowdate = day + "." + month + "." + year;
 
   const deleteItem = async (userId) => {
-    // const yunus = await deleteDoc(
-    //   doc(firestore, `${userEmail.email}.product`, userId)
-    // );
+    await deleteDoc(doc(firestore, `${userEmail.email}.product`, userId));
     // console.log(yunus);
-    const yunus = product.filter((item) => item.id !== userId);
-    setProduct(yunus);
     navigate("/praducts");
   };
+
+  useEffect(() => {
+    deleteItem();
+  }, []);
 
   const cancel = (e) => {
     message.error("Click on No");

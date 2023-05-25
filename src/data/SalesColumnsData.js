@@ -17,9 +17,17 @@ export const SalesColumnsData = [
     key: "date",
   },
   {
-    title: "To’lov turi",
-    dataIndex: "address",
-    key: "address",
+    title: "Total Price",
+    key: "quanty",
+    render: (_, record) => (
+      <p>
+        {record
+          ? ((record?.orginalPrice * record?.quanty) / record?.prosent)
+              .toString()
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "USD"
+          : null}
+      </p>
+    ),
   },
   {
     title: "Status",

@@ -1,6 +1,6 @@
-import { Button, Select } from "antd";
+import { Select } from "antd";
 
-export const OrderColumnsData = [
+export const OrderColumnsData = (selectFunc) => [
   {
     title: "Ism",
     dataIndex: "name",
@@ -20,8 +20,9 @@ export const OrderColumnsData = [
     title: "Status",
     dataIndex: "status",
     key: "status",
-    render: () => (
+    render: (_, record) => (
       <Select
+        onChange={(value) => selectFunc(value, record?.id)}
         options={[
           {
             value: "Qabul qilindi",

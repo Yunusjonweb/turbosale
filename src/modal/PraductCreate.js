@@ -11,11 +11,11 @@ import User from "../assets/User.png";
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
-  const [selectValue, setSelectValue] = useState(null);
   const [form] = Form.useForm();
   const [url, setUrl] = useState(null);
   const { setProduct } = useContext(AppContext);
   const inputRef = useRef(null);
+  const [selectValue, setSelectValue] = useState(null);
 
   const handleImagesChange = (e) => {
     const file = e.target.files[0];
@@ -52,6 +52,7 @@ export default function PraductCreate({ open, setOpen }) {
         {
           ...form.getFieldsValue(),
           img: url,
+          select: selectValue,
           id: docRef.id,
         },
       ]);

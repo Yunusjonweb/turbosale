@@ -1,11 +1,8 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
-import { useContext, useEffect } from "react";
-import { AppContext } from "../context/ContextProvider";
 import { UpdateData } from "./Update";
 
 export default function EditModal({ modal2Open, setModal2Open, id }) {
-  const { product, setProduct } = useContext(AppContext);
   const [form] = Form.useForm();
   const name = Form.useWatch("name", form);
   const price = Form.useWatch("orginalPrice", form);

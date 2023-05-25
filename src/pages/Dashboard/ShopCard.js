@@ -7,11 +7,9 @@ import { ProductContext } from "../../context/ProductContext";
 import { ShopCardData } from "../../data/ShopCardData";
 
 export default function ShopCard() {
-  const { order, setOrder } = useContext(ProductContext);
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-
-  const [product, setProduct] = useState([]);
+  const { order, setOrder } = useContext(ProductContext);
 
   // const api = {
   //   baseurl: "https://islomapi.uz/api/present/",

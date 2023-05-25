@@ -1,7 +1,7 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
-export const ShopCardData = (plusHandler, minusHandle, separatePrice) => [
+export const ShopCardData = (plusHandler, minusHandle) => [
   {
     title: "Product name",
     dataIndex: "name",
