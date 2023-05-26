@@ -20,4 +20,9 @@ export const ShopCardContainer = styled.div`
     height: 50px;
     border-radius: 5px;
   }
+
+  .totalPrice_title {
+    color: #4b5563;
+    font-size: 17px;
+  }
 `;

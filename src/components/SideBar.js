@@ -19,6 +19,8 @@ import Clients from "../pages/Dashboard/Clients/Clients";
 import Order from "../pages/Dashboard/Order/Order";
 import Supplier from "../pages/Dashboard/Supplier/Supplier";
 import Category from "../pages/Dashboard/Category/Category";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { firestore } from "../firebase/firebase";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
@@ -52,13 +54,22 @@ const SideBar = () => {
     setOpen(!open);
   };
 
-  const addToBasket = (item) => {
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+
+  const addToBasket = async (item) => {
     const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
     if (itemIndex < 0) {
       const newItem = {
         ...item,
         quanty: 1,
       };
+      const docRef = await addDoc(
+        collection(firestore, `${userEmail.email}.basket`),
+        {
+          newItem,
+        }
+      );
+      console.log(docRef);
       setOrder([...order, newItem]);
     } else {
       const newOrder = order.map((orderItem, index) => {

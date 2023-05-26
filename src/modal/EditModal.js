@@ -41,6 +41,7 @@ export default function EditModal({ modal2Open, setModal2Open, id }) {
             maxWidth: 600,
           }}
           form={form}
+          setFields={form.getFieldsValue}
         >
           <Form.Item label="Mahsulot nomi" name={"name"}>
             <Input />

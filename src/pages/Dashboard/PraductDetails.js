@@ -14,7 +14,7 @@ export default function PraductDetails() {
   const goBack = () => navigate(-1);
   const [modal2Open, setModal2Open] = useState(false);
   const { addToBasket } = useContext(ProductContext);
-  const { product, setProduct } = useContext(AppContext);
+  const { product } = useContext(AppContext);
   const { userId } = useParams();
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));

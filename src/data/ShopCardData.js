@@ -9,8 +9,9 @@ export const ShopCardData = (plusHandler, minusHandle) => [
   },
   {
     title: "Price",
-    dataIndex: "orginalPrice",
-    key: "price",
+    render: (_, record) => (
+      <p>{record?.orginalPrice ? record?.orginalPrice + " " + "USD" : null}</p>
+    ),
   },
   {
     title: "Add",
@@ -26,7 +27,7 @@ export const ShopCardData = (plusHandler, minusHandle) => [
         }}
       >
         <Button onClick={() => minusHandle(record?.id)}>-</Button>
-        <p>{record?.quanty}</p>
+        <p>{record?.quanty ? record?.quanty + "x" : null}</p>
         <Button onClick={() => plusHandler(record?.id)}>+</Button>
       </div>
     ),

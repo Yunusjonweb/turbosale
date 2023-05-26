@@ -103,6 +103,10 @@ export default function ShopCard() {
     setOrder(userDatas);
   };
 
+  const totalPrice = order.reduce((sum, el) => {
+    return sum + el.orginalPrice * el.quanty;
+  }, 0);
+
   return (
     <ShopCardContainer>
       <div className="shopCard_section">
@@ -110,6 +114,9 @@ export default function ShopCard() {
           columns={ShopCardData(plusHandle, minusHandle)}
           dataSource={order}
         />
+        <h2 className="totalPrice_title">
+          {totalPrice ? "Total price:" + totalPrice : null}
+        </h2>
         <Button type={"ghost"} className="return_btn" onClick={goBack}>
           <ArrowLeftOutlined />
           Qaytish
