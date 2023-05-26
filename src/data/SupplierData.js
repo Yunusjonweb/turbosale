@@ -1,6 +1,6 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown } from "antd";
-const items = [
+const items = (id, deleteItem) => [
   {
     key: "1",
     label: (
@@ -24,6 +24,7 @@ const items = [
       <li
         style={{ border: "none", boxShadow: "none", width: "100%" }}
         className="btn"
+        onClick={() => deleteItem(id)}
       >
         Delete
       </li>
@@ -31,7 +32,7 @@ const items = [
   },
 ];
 
-export const SupplierColumnsData = [
+export const SupplierColumnsData = (deleteItem) => [
   {
     title: "Product img",
     key: "name",
@@ -66,10 +67,10 @@ export const SupplierColumnsData = [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    render: () => (
+    render: (_, record) => (
       <Dropdown
         menu={{
-          items,
+          items: items(record?.id, deleteItem),
         }}
         placement="bottomLeft"
       >

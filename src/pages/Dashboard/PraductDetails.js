@@ -35,7 +35,6 @@ export default function PraductDetails() {
 
   const deleteItem = async (userId) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.product`, userId));
-    // console.log(yunus);
     navigate("/praducts");
   };
 
