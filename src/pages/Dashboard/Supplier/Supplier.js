@@ -7,18 +7,17 @@ import {
   getDocs,
   onSnapshot,
 } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
-import { ProductContext } from "../../../context/ProductContext";
+import { useEffect, useState } from "react";
 import { SupplierColumnsData } from "../../../data/SupplierData";
 import { firestore } from "../../../firebase/firebase";
-import EditModal from "../../../modal/EditModal";
+import SupplierEdit from "../../../modal/SupplierEdit";
 import SupplierModal from "../../../modal/SupplierModal";
 import { SupplierContainer } from "../../../styles/components/SupplierStyles";
 
 const Supplier = () => {
-  const { order } = useContext(ProductContext);
-  const [modal2Open, setModal2Open] = useState(false);
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [modal2Open, setModal2Open] = useState(false);
   const [supplier, setSupplier] = useState([]);
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
@@ -47,11 +46,16 @@ const Supplier = () => {
 
   return (
     <SupplierContainer>
-      <EditModal open={open} setOpen={setOpen} />
+      <SupplierEdit open={open} setOpen={setOpen} />
       <div className="supplier">
         <div className="supplier_form">
           <div className="supplier_input">
-            <Input placeholder="Search" prefix={<SearchOutlined />} />
+            <Input
+              value={search}
+              placeholder="Search"
+              onChange={(e) => setSearch(e.target.value)}
+              prefix={<SearchOutlined />}
+            />
           </div>
           <div className="supplier_btns">
             <Button>
@@ -65,7 +69,9 @@ const Supplier = () => {
         </div>
         <Table
           columns={SupplierColumnsData(deleteItem)}
-          dataSource={supplier}
+          dataSource={supplier.filter((item) =>
+            item.supplierName.toLowerCase().includes(search.toLowerCase())
+          )}
         />
       </div>
     </SupplierContainer>

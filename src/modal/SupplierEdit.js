@@ -1,4 +1,3 @@
-import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
 import { UpdateData } from "./Update";
 
@@ -60,9 +59,7 @@ export default function SuppliearEdit({ open, setOpen }) {
           </Form.Item>
         </Form>
       </Modal>
-      <Button onClick={showModal}>
-        <EditOutlined /> Edit
-      </Button>
+      <Button onClick={showModal}>Edit</Button>
     </div>
   );
 }
