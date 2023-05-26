@@ -31,8 +31,11 @@ export const SalesColumnsData = [
   },
   {
     title: "Status",
-    dataIndex: "status",
     key: "status",
-    render: () => <Button>Sotildi</Button>,
+    render: (_, record) => (
+      <Button style={{ color: `${record?.status}` ? "blue" : "red" }}>
+        {record?.status}
+      </Button>
+    ),
   },
 ];

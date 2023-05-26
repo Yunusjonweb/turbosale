@@ -22,7 +22,7 @@ export const OrderColumnsData = (selectFunc) => [
     key: "status",
     render: (_, record) => (
       <Select
-        onChange={(value) => selectFunc(value, record?.id)}
+        onChange={(label) => selectFunc(label, record?.id)}
         options={[
           {
             value: "Qabul qilindi",

@@ -1,16 +1,15 @@
 import { Table } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { ProductContext } from "../../../context/ProductContext";
 import { OrderColumnsData } from "../../../data/OrderColumnsData";
 
 const Order = () => {
   const { order, setOrder } = useContext(ProductContext);
 
-  const selectFunc = (value, id) => {
-    // const findIndex = order.find((item) => item.id === id);
+  const selectFunc = (label, id) => {
     const newState = order.map((obj) => {
       if (obj.id === id) {
-        return { ...obj, status: value };
+        return { ...obj, status: label };
       }
       return obj;
     });

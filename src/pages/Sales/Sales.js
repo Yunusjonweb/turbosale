@@ -5,6 +5,7 @@ import { ProductContext } from "../../context/ProductContext";
 
 const Sales = () => {
   const { order } = useContext(ProductContext);
+
   return <Table columns={SalesColumnsData} dataSource={order} />;
 };
 export default Sales;
