@@ -1,21 +1,26 @@
-import { Modal, Form, Input } from "antd";
-import { UpdateData } from "./Update";
+import { EditOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, Button } from "antd";
+import { SupplierUpdate } from "./SupplierUpdate";
 
-export default function SuppliearEdit({ open, setOpen }) {
+export default function SuppliearEdit({ open, setOpen, id }) {
   const [form] = Form.useForm();
-  const name = Form.useWatch("name", form);
-  const price = Form.useWatch("orginalPrice", form);
-  const sale = Form.useWatch("salePrice", form);
+  const supplierName = Form.useWatch("supplierName", form);
+  const adress = Form.useWatch("adress", form);
+  const product = Form.useWatch("product", form);
+  const phone = Form.useWatch("phone", form);
   const quantity = Form.useWatch("quantity", form);
-  const textArea = Form.useWatch("textArea", form);
 
   const handleCancel = () => {
     setOpen(false);
   };
 
   const onFinish = () => {
-    UpdateData(name, price, sale, quantity, textArea);
+    SupplierUpdate(supplierName, adress, product, phone, quantity, id);
     setOpen(false);
+  };
+
+  const showModal = () => {
+    setOpen(true);
   };
 
   return (
@@ -38,23 +43,26 @@ export default function SuppliearEdit({ open, setOpen }) {
           form={form}
           setFields={form.getFieldsValue}
         >
-          <Form.Item label="Mahsulot nomi" name={"name"}>
+          <Form.Item label="Supplier Name" name={"supplierName"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Asl Narxi" name={"orginalPrice"}>
+          <Form.Item label="Adress" name={"adress"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Sotuv narxi" name={"salePrice"}>
+          <Form.Item label="Product" name={"product"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Miqdori" name={"quantity"}>
+          <Form.Item label="Phone" name={"phone"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Tasnif" name={"textArea"}>
-            <Input.TextArea />
+          <Form.Item label="Quantity" name={"quantity"}>
+            <Input />
           </Form.Item>
         </Form>
       </Modal>
+      <Button onClick={showModal}>
+        <EditOutlined /> Edit
+      </Button>
     </div>
   );
 }

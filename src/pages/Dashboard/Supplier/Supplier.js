@@ -10,7 +10,6 @@ import {
 import { useEffect, useState } from "react";
 import { SupplierColumnsData } from "../../../data/SupplierData";
 import { firestore } from "../../../firebase/firebase";
-import SupplierEdit from "../../../modal/SupplierEdit";
 import SupplierModal from "../../../modal/SupplierModal";
 import { SupplierContainer } from "../../../styles/components/SupplierStyles";
 
@@ -40,12 +39,7 @@ const Supplier = () => {
   }, [supplier]);
 
   const deleteItem = async (userId) => {
-    console.log(userId);
     await deleteDoc(doc(firestore, `${userEmail.email}.supplier`, userId));
-  };
-
-  const showModal = () => {
-    setOpen(true);
   };
 
   return (
@@ -71,13 +65,12 @@ const Supplier = () => {
           </div>
         </div>
         <Table
-          columns={SupplierColumnsData(deleteItem, showModal)}
+          columns={SupplierColumnsData(deleteItem, open, setOpen)}
           dataSource={supplier.filter((item) =>
             item.supplierName.toLowerCase().includes(search.toLowerCase())
           )}
         />
       </div>
-      <SupplierEdit open={open} setOpen={setOpen} />
     </SupplierContainer>
   );
 };

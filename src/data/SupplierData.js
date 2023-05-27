@@ -1,7 +1,8 @@
-import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import SuppliearEdit from "../modal/SupplierEdit";
 
-const items = (id, deleteItem, showModal) => [
+const items = (id, deleteItem, open, setOpen) => [
   {
     key: "1",
     label: (
@@ -14,9 +15,8 @@ const items = (id, deleteItem, showModal) => [
       <li
         style={{ border: "none", boxShadow: "none", width: "100%" }}
         className="btn"
-        onClick={() => showModal()}
       >
-        Edit
+        <SuppliearEdit open={open} setOpen={setOpen} id={id} />
       </li>
     ),
   },
@@ -34,7 +34,7 @@ const items = (id, deleteItem, showModal) => [
   },
 ];
 
-export const SupplierColumnsData = (deleteItem, showModal) => [
+export const SupplierColumnsData = (deleteItem, open, setOpen) => [
   {
     title: "Product img",
     key: "name",
@@ -72,7 +72,7 @@ export const SupplierColumnsData = (deleteItem, showModal) => [
     render: (_, record) => (
       <Dropdown
         menu={{
-          items: items(record?.id, deleteItem, showModal),
+          items: items(record?.id, deleteItem, open, setOpen),
         }}
         placement="bottomLeft"
       >
