@@ -2,7 +2,7 @@ import { Button } from "antd";
 
 export const SalesColumnsData = [
   {
-    title: "Ism",
+    title: "Full Name",
     dataIndex: "name",
     key: "name",
   },

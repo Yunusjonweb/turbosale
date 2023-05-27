@@ -1,6 +1,6 @@
 import { Select } from "antd";
 
-export const OrderColumnsData = (selectFunc) => [
+export const OrderColumnsData = (selectFunc, optionValue) => [
   {
     title: "Ism",
     dataIndex: "name",
@@ -22,22 +22,15 @@ export const OrderColumnsData = (selectFunc) => [
     key: "status",
     render: (_, record) => (
       <Select
-        onChange={(label) => selectFunc(label, record?.id)}
-        options={[
-          {
-            value: "Qabul qilindi",
-            label: "Qabul qilindi",
-          },
-          {
-            value: "Kutilmoqda",
-            label: "Kutilmoqda",
-          },
-          {
-            value: "Rad Etilgan",
-            label: "Rad Etilgan",
-          },
-        ]}
-      />
+        style={{ width: 140 }}
+        onChange={(status) => selectFunc(status, record?.id)}
+      >
+        {optionValue.map((item) => (
+          <Select.Option style={{ color: item.color }} key={item.status}>
+            {item.status}
+          </Select.Option>
+        ))}
+      </Select>
     ),
   },
 ];

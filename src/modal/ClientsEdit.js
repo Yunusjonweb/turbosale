@@ -1,7 +1,7 @@
 import { Modal, Form, Input } from "antd";
 import { UpdateData } from "./Update";
 
-export default function SuppliearEdit({ open, setOpen }) {
+export default function ClientsEdit({ open, setOpen }) {
   const [form] = Form.useForm();
   const name = Form.useWatch("name", form);
   const price = Form.useWatch("orginalPrice", form);

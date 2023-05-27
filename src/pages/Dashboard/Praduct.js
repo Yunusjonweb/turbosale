@@ -32,7 +32,6 @@ export default function Praduct() {
   const [filters, setFilter] = useState([]);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
-  const [last, setLast] = useState([]);
   const { product, setProduct } = useContext(AppContext);
   const loader = [];
 
@@ -129,7 +128,7 @@ export default function Praduct() {
 
   const LastAdded = () => {
     const productLength = product[product.length - 1];
-    setLast(productLength);
+    console.log(productLength);
   };
 
   return (

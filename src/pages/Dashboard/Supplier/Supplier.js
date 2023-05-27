@@ -44,9 +44,12 @@ const Supplier = () => {
     await deleteDoc(doc(firestore, `${userEmail.email}.supplier`, userId));
   };
 
+  const showModal = () => {
+    setOpen(true);
+  };
+
   return (
     <SupplierContainer>
-      <SupplierEdit open={open} setOpen={setOpen} />
       <div className="supplier">
         <div className="supplier_form">
           <div className="supplier_input">
@@ -68,12 +71,13 @@ const Supplier = () => {
           </div>
         </div>
         <Table
-          columns={SupplierColumnsData(deleteItem)}
+          columns={SupplierColumnsData(deleteItem, showModal)}
           dataSource={supplier.filter((item) =>
             item.supplierName.toLowerCase().includes(search.toLowerCase())
           )}
         />
       </div>
+      <SupplierEdit open={open} setOpen={setOpen} />
     </SupplierContainer>
   );
 };
