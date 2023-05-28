@@ -2,7 +2,7 @@ import { Select } from "antd";
 
 export const OrderColumnsData = (selectFunc, optionValue) => [
   {
-    title: "Ism",
+    title: "Full Name",
     dataIndex: "name",
     key: "name",
   },

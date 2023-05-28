@@ -15,6 +15,11 @@ export const NavbarContainer = styled.div`
     justify-content: space-between;
   }
 
+  .navbar a.active {
+    font-size: 17px;
+    font-weight: bold;
+  }
+
   .container {
     width: 100%;
     max-width: 1200px;

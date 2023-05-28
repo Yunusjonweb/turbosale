@@ -8,9 +8,9 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { SupplierColumnsData } from "../../../data/SupplierData";
+import { NavLink } from "react-router-dom";
+import { ClientsColumnsData } from "../../../data/ClientsDataColumns";
 import { firestore } from "../../../firebase/firebase";
-import ClientsEdit from "../../../modal/ClientsEdit";
 import ClientsModal from "../../../modal/ClientsModal";
 import { SupplierContainer } from "../../../styles/components/SupplierStyles";
 
@@ -40,12 +40,7 @@ const Clients = () => {
   }, [clients]);
 
   const deleteItem = async (userId) => {
-    console.log(userId);
     await deleteDoc(doc(firestore, `${userEmail.email}.clients`, userId));
-  };
-
-  const showModal = () => {
-    setOpen(true);
   };
 
   return (
@@ -68,13 +63,13 @@ const Clients = () => {
           </div>
         </div>
         <Table
-          columns={SupplierColumnsData(deleteItem, showModal)}
+          columns={ClientsColumnsData(deleteItem, open, setOpen)}
           dataSource={clients.filter((item) =>
-            item.supplierName.toLowerCase().includes(search.toLowerCase())
+            item.name.toLowerCase().includes(search.toLowerCase())
           )}
         />
+        <NavLink to="View">View</NavLink>
       </div>
-      <ClientsEdit open={open} setOpen={setOpen} />
     </SupplierContainer>
   );
 };

@@ -1,21 +1,25 @@
-import { Modal, Form, Input } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import { Modal, Form, Input, Button } from "antd";
+import { ClientsUpdate } from "./ClientsUpdate";
 import { UpdateData } from "./Update";
 
-export default function ClientsEdit({ open, setOpen }) {
+export default function ClientsEdit({ open, setOpen, id }) {
   const [form] = Form.useForm();
   const name = Form.useWatch("name", form);
-  const price = Form.useWatch("orginalPrice", form);
-  const sale = Form.useWatch("salePrice", form);
-  const quantity = Form.useWatch("quantity", form);
-  const textArea = Form.useWatch("textArea", form);
+  const email = Form.useWatch("email", form);
+  const phone = Form.useWatch("phone", form);
 
   const handleCancel = () => {
     setOpen(false);
   };
 
   const onFinish = () => {
-    UpdateData(name, price, sale, quantity, textArea);
+    ClientsUpdate(name, email, phone, id);
     setOpen(false);
+  };
+
+  const showModal = () => {
+    setOpen(true);
   };
 
   return (
@@ -38,23 +42,18 @@ export default function ClientsEdit({ open, setOpen }) {
           form={form}
           setFields={form.getFieldsValue}
         >
-          <Form.Item label="Mahsulot nomi" name={"name"}>
+          <Form.Item label="Name" name={"name"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Asl Narxi" name={"orginalPrice"}>
+          <Form.Item label="Email" name={"email"}>
             <Input />
           </Form.Item>
-          <Form.Item label="Sotuv narxi" name={"salePrice"}>
+          <Form.Item label="Phone" name={"phone"}>
             <Input />
-          </Form.Item>
-          <Form.Item label="Miqdori" name={"quantity"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tasnif" name={"textArea"}>
-            <Input.TextArea />
           </Form.Item>
         </Form>
       </Modal>
+      <li onClick={showModal}>Edit</li>
     </div>
   );
 }

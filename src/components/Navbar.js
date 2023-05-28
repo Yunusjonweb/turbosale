@@ -4,7 +4,7 @@ import {
   HeartOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { NavbarContainer } from "../styles/components/NavbarStyles";
 
 function Navbar() {
@@ -17,8 +17,10 @@ function Navbar() {
           <div className="navbar_wrap">
             <nav className="navbar">
               <ul className="navbar-collapse">
-                <Link to="/">Home</Link>
-                <Link
+                <NavLink NavLink to="/">
+                  Home
+                </NavLink>
+                <NavLink
                   to={
                     localStorage.getItem("userData") &&
                     JSON.parse(newUserData).token === true
@@ -27,9 +29,9 @@ function Navbar() {
                   }
                 >
                   Shop
-                </Link>
-                <Link to="/about">About</Link>
-                <Link to="/contact">Contact</Link>
+                </NavLink>
+                <NavLink to="/about">About</NavLink>
+                <NavLink to="/contact">Contact</NavLink>
               </ul>
               <ul className="navbar-icon">
                 <li>

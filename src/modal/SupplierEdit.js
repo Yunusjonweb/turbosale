@@ -60,9 +60,7 @@ export default function SuppliearEdit({ open, setOpen, id }) {
           </Form.Item>
         </Form>
       </Modal>
-      <Button onClick={showModal}>
-        <EditOutlined /> Edit
-      </Button>
+      <li onClick={showModal}>Edit</li>
     </div>
   );
 }

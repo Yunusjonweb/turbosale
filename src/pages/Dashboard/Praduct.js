@@ -76,6 +76,7 @@ export default function Praduct() {
     const userDatas = product.map((user) => {
       if (user.id === users) {
         const newQuanty = user.quanty + 1;
+        console.log(newQuanty);
         return {
           ...user,
           quanty: newQuanty,
