@@ -39,6 +39,7 @@ export const ShopCardData = (plusHandler, minusHandle, deleteItem) => [
       <p>
         {record
           ? ((record?.orginalPrice * record?.quanty) / record?.prosent)
+              .toFixed(2)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "USD"
           : null}

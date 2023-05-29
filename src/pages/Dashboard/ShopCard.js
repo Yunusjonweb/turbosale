@@ -61,7 +61,14 @@ export default function ShopCard() {
           dataSource={order}
         />
         <h2 className="totalPrice_title">
-          {totalPrice ? "Total price:" + totalPrice : null}
+          {totalPrice
+            ? "Total price:" +
+              totalPrice
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+              " USD"
+            : null}
         </h2>
         <Button type={"ghost"} className="return_btn" onClick={goBack}>
           <ArrowLeftOutlined />

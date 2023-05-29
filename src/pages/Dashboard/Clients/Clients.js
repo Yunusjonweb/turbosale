@@ -8,13 +8,14 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { ClientsColumnsData } from "../../../data/ClientsDataColumns";
 import { firestore } from "../../../firebase/firebase";
 import ClientsModal from "../../../modal/ClientsModal";
 import { SupplierContainer } from "../../../styles/components/SupplierStyles";
+import { useNavigate } from "react-router-dom";
 
 const Clients = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [modal2Open, setModal2Open] = useState(false);
@@ -23,6 +24,15 @@ const Clients = () => {
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
   const colRef = collection(firestore, `${userEmail.email}.clients`);
+
+  const addToBasket = async (item) => {
+    const selectedProduct = clients.filter((prod) => prod.id === item.id);
+    navigate("/clients/view", {
+      state: {
+        data: selectedProduct,
+      },
+    });
+  };
 
   useEffect(() => {
     getDocs(colRef)
@@ -63,12 +73,11 @@ const Clients = () => {
           </div>
         </div>
         <Table
-          columns={ClientsColumnsData(deleteItem, open, setOpen)}
-          dataSource={clients.filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase())
-          )}
+          columns={ClientsColumnsData(deleteItem, addToBasket, open, setOpen)}
+          dataSource={clients.filter((item) => {
+            return item.name.toLowerCase().includes(search.toLowerCase());
+          })}
         />
-        <NavLink to="View">View</NavLink>
       </div>
     </SupplierContainer>
   );

@@ -1,7 +1,5 @@
-import { EditOutlined } from "@ant-design/icons";
-import { Modal, Form, Input, Button } from "antd";
+import { Modal, Form, Input } from "antd";
 import { ClientsUpdate } from "./ClientsUpdate";
-import { UpdateData } from "./Update";
 
 export default function ClientsEdit({ open, setOpen, id }) {
   const [form] = Form.useForm();

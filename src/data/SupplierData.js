@@ -2,11 +2,21 @@ import { Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import SuppliearEdit from "../modal/SupplierEdit";
 
-const items = (id, deleteItem, open, setOpen) => [
+const items = (id, supplierName, deleteItem, addToBasket, open, setOpen) => [
   {
     key: "1",
     label: (
-      <li style={{ border: "none", boxShadow: "none", width: "100%" }}>View</li>
+      <li
+        style={{ border: "none", boxShadow: "none", width: "100%" }}
+        onClick={() =>
+          addToBasket({
+            id: id,
+            supplierName: supplierName,
+          })
+        }
+      >
+        View
+      </li>
     ),
   },
   {
@@ -34,7 +44,7 @@ const items = (id, deleteItem, open, setOpen) => [
   },
 ];
 
-export const SupplierColumnsData = (deleteItem, open, setOpen) => [
+export const SupplierColumnsData = (deleteItem, addToBasket, open, setOpen) => [
   {
     title: "Product img",
     key: "name",
@@ -72,7 +82,14 @@ export const SupplierColumnsData = (deleteItem, open, setOpen) => [
     render: (_, record) => (
       <Dropdown
         menu={{
-          items: items(record?.id, deleteItem, open, setOpen),
+          items: items(
+            record?.id,
+            record?.supplierName,
+            deleteItem,
+            addToBasket,
+            open,
+            setOpen
+          ),
         }}
         placement="bottomLeft"
       >

@@ -41,6 +41,13 @@ export default function Praduct() {
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
+  const numOfTotalPages = Math.ceil(product.length / todos);
+  const pages = [...Array(current + 1).keys()].slice(1);
+  const newOfLastPages = current * todos;
+  const newOfFristPages = newOfLastPages - todos;
+
+  const visiblePages = product.slice(newOfFristPages, newOfLastPages);
+
   const productSort = async () => {
     const products = collection(firestore, `${userEmail.email}.product`);
     const q = await query(products, orderBy("name"), limit(6));
@@ -48,13 +55,6 @@ export default function Praduct() {
     const productSort = docs.docs.map((doc) => doc.data());
     setProduct(productSort);
   };
-
-  const numOfTotalPages = Math.ceil(product.length / todos);
-  const pages = [...Array(current + 1).keys()].slice(1);
-  const newOfLastPages = current * todos;
-  const newOfFristPages = newOfLastPages - todos;
-
-  const visiblePages = product.slice(newOfFristPages, newOfLastPages);
 
   const prevHandlerPage = () => {
     if (current !== 1) {
@@ -72,11 +72,11 @@ export default function Praduct() {
     setTodos(value);
   };
 
-  const plusHandle = (users) => {
+  const plusHandle = (id) => {
     const userDatas = product.map((user) => {
-      if (user.id === users) {
+      if (user.id === id) {
+        console.log(user.id, id);
         const newQuanty = user.quanty + 1;
-        console.log(newQuanty);
         return {
           ...user,
           quanty: newQuanty,
@@ -88,10 +88,10 @@ export default function Praduct() {
     setProduct(userDatas);
   };
 
-  const minusHandle = (users) => {
+  const minusHandle = (id) => {
     const userDatas = product.map((user) => {
       console.log(user);
-      if (user.id === users) {
+      if (user.id === id) {
         const newQuanty = user.quanty - 1;
         return {
           ...user,
@@ -128,8 +128,9 @@ export default function Praduct() {
   };
 
   const LastAdded = () => {
-    const productLength = product[product.length - 1];
+    const productLength = product.slice();
     console.log(productLength);
+    setProduct(productLength);
   };
 
   return (

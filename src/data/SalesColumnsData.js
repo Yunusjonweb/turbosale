@@ -34,7 +34,7 @@ export const SalesColumnsData = [
     key: "status",
     render: (_, record) => (
       <Button style={{ color: `${record?.status}` ? "blue" : "red" }}>
-        {record?.status}
+        {record?.status ? record?.status : "Aniqlanmagan"}
       </Button>
     ),
   },

@@ -19,8 +19,10 @@ import Clients from "../pages/Dashboard/Clients/Clients";
 import Order from "../pages/Dashboard/Order/Order";
 import Supplier from "../pages/Dashboard/Supplier/Supplier";
 import Category from "../pages/Dashboard/Category/Category";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
+import ClientsView from "../pages/Dashboard/Clients/ClientsView";
+import SupplierView from "../pages/Dashboard/Supplier/SupplierView";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
@@ -155,8 +157,10 @@ const SideBar = () => {
                   <Route path="/praducts" element={<Praduct />} />
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/clients" element={<Clients />} />
+                  <Route path="/clients/view" element={<ClientsView />} />
                   <Route path="/order" element={<Order />} />
                   <Route path="/supplier" element={<Supplier />} />
+                  <Route path="/supplier/view" element={<SupplierView />} />
                   <Route path="/category" element={<Category />} />
                   <Route path="/details/:userId" element={<PraductDetails />} />
                   <Route path="/login" element={<Login />} />

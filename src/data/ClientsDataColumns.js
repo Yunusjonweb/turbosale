@@ -1,11 +1,33 @@
 import { MoreOutlined } from "@ant-design/icons";
 import { Dropdown } from "antd";
 import ClientsEdit from "../modal/ClientsEdit";
-const items = (id, deleteItem, open, setOpen) => [
+
+const items = (
+  id,
+  name,
+  phone,
+  email,
+  deleteItem,
+  addToBasket,
+  open,
+  setOpen
+) => [
   {
     key: "1",
     label: (
-      <li style={{ border: "none", boxShadow: "none", width: "100%" }}>View</li>
+      <li
+        style={{ border: "none", boxShadow: "none", width: "100%" }}
+        onClick={() =>
+          addToBasket({
+            id: id,
+            name: name,
+            email: email,
+            phone: phone,
+          })
+        }
+      >
+        View
+      </li>
     ),
   },
   {
@@ -33,7 +55,7 @@ const items = (id, deleteItem, open, setOpen) => [
   },
 ];
 
-export const ClientsColumnsData = (deleteItem, open, setOpen) => [
+export const ClientsColumnsData = (deleteItem, addToBasket, open, setOpen) => [
   {
     title: "Client img",
     key: "name",
@@ -71,7 +93,16 @@ export const ClientsColumnsData = (deleteItem, open, setOpen) => [
     render: (_, record) => (
       <Dropdown
         menu={{
-          items: items(record?.id, deleteItem, open, setOpen),
+          items: items(
+            record?.id,
+            record?.name,
+            record?.email,
+            record?.phone,
+            deleteItem,
+            addToBasket,
+            open,
+            setOpen
+          ),
         }}
         placement="bottomLeft"
       >
