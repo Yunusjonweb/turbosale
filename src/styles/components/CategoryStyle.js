@@ -1,18 +1,24 @@
 import styled from "styled-components";
 
 export const CategoryContainer = styled.div`
+  .categorys {
+    display: flex;
+    flex-direction: column;
+  }
+
   .category_btn {
     color: #fff;
     float: right;
     font-size: 14px;
     font-weight: bold;
+    margin: 20px;
     background: #465362;
   }
 
   .category_cards {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
     gap: 20px;
   }

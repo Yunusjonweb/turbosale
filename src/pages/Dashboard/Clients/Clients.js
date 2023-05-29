@@ -26,7 +26,7 @@ const Clients = () => {
   const colRef = collection(firestore, `${userEmail.email}.clients`);
 
   const addToBasket = async (item) => {
-    const selectedProduct = clients.filter((prod) => prod.id === item.id);
+    const selectedProduct = clients.filter((prod) => prod.status === item.id);
     navigate("/clients/view", {
       state: {
         data: selectedProduct,

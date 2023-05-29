@@ -11,6 +11,8 @@ export default function ClientsView() {
 
   const { order } = useContext(ProductContext);
 
+  const filterSold = order.filter((item) => item.status === "Sotildi");
+
   return (
     <ClientsViewContainer>
       <div className="clientsView">
@@ -26,7 +28,7 @@ export default function ClientsView() {
           </div>
         </div> */}
         <div className="clients_product">
-          <Table columns={ClientsViewColumnsData} dataSource={order} />
+          <Table columns={ClientsViewColumnsData} dataSource={filterSold} />
         </div>
       </div>
     </ClientsViewContainer>

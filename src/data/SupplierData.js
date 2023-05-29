@@ -2,7 +2,16 @@ import { Dropdown } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import SuppliearEdit from "../modal/SupplierEdit";
 
-const items = (id, supplierName, deleteItem, addToBasket, open, setOpen) => [
+const items = (
+  id,
+  supplierName,
+  img,
+  adress,
+  deleteItem,
+  addToBasket,
+  open,
+  setOpen
+) => [
   {
     key: "1",
     label: (
@@ -12,6 +21,8 @@ const items = (id, supplierName, deleteItem, addToBasket, open, setOpen) => [
           addToBasket({
             id: id,
             supplierName: supplierName,
+            img: img,
+            adress: adress,
           })
         }
       >
@@ -84,6 +95,8 @@ export const SupplierColumnsData = (deleteItem, addToBasket, open, setOpen) => [
         menu={{
           items: items(
             record?.id,
+            record?.img,
+            record?.adress,
             record?.supplierName,
             deleteItem,
             addToBasket,
