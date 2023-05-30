@@ -15,7 +15,7 @@ export const DashboardData = [
   },
   {
     id: 3,
-    title: "Marja",
+    title: "Foyda",
     number: 1568,
     img: <Marja />,
   },

@@ -25,15 +25,6 @@ const Clients = () => {
 
   const colRef = collection(firestore, `${userEmail.email}.clients`);
 
-  const addToBasket = async (item) => {
-    const selectedProduct = clients.filter((prod) => prod.status === item.id);
-    navigate("/clients/view", {
-      state: {
-        data: selectedProduct,
-      },
-    });
-  };
-
   useEffect(() => {
     getDocs(colRef)
       .then((snapshot) => {
@@ -51,6 +42,16 @@ const Clients = () => {
 
   const deleteItem = async (userId) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.clients`, userId));
+  };
+
+  const addToBasket = async (item) => {
+    const selectedProduct = clients.filter((prod) => prod.id === item.id);
+    console.log(selectedProduct);
+    navigate("/clients/view", {
+      state: {
+        data: selectedProduct,
+      },
+    });
   };
 
   return (

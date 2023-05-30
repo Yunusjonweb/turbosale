@@ -16,17 +16,26 @@ export default function ClientsView() {
   return (
     <ClientsViewContainer>
       <div className="clientsView">
-        {/* <div className="clients_profile">
-          <div className="clients_info">
-            {data.map((item) => (
-              <div>
-                <p>{item.name}</p>
-                <p>{item.email}</p>
-                <p>{item.phone}</p>
+        <div className="clients_profile">
+          {data.map((item) => (
+            <div className="clients_info">
+              <div className="clients_img">
+                <img
+                  src={
+                    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp=CAU"
+                  }
+                  alt={item.name}
+                />
               </div>
-            ))}
-          </div>
-        </div> */}
+              <div className="clients_companyName">{item.name}</div>
+              <div className="clients_title">Costumer</div>
+              <div className="clients_companyAdress">{item.email}</div>
+              <div className="clients_title">Email</div>
+              <div className="clients_companyPhone">{item.phone}</div>
+              <div className="clients_title">Phone</div>
+            </div>
+          ))}
+        </div>
         <div className="clients_product">
           <Table columns={ClientsViewColumnsData} dataSource={filterSold} />
         </div>
