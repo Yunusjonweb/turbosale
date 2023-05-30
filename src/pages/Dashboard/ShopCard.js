@@ -50,7 +50,7 @@ export default function ShopCard() {
   };
 
   const totalPrice = order.reduce((sum, el) => {
-    return sum + el.orginalPrice * el.quanty;
+    return sum + el.salePrice * el.quanty;
   }, 0);
 
   return (

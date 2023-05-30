@@ -34,10 +34,6 @@ const Order = () => {
     setOrder(newState);
   };
 
-  // useEffect(() => {
-  //   console.log(order);
-  // }, [order]);
-
   return (
     <Table
       columns={OrderColumnsData(selectFunc, optionValue)}

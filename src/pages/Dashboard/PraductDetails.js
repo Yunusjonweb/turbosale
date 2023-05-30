@@ -116,6 +116,7 @@ export default function PraductDetails() {
                       prosent: item.prosent,
                       quantity: item.quantity,
                       email: userEmail.email,
+                      salePrice: item.salePrice,
                       orginalPrice: item.orginalPrice,
                       date: nowdate,
                     })

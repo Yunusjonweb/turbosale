@@ -46,7 +46,6 @@ const Clients = () => {
 
   const addToBasket = async (item) => {
     const selectedProduct = clients.filter((prod) => prod.id === item.id);
-    console.log(selectedProduct);
     navigate("/clients/view", {
       state: {
         data: selectedProduct,
