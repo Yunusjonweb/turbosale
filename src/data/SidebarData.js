@@ -25,9 +25,9 @@ export const SiderBarData = [
   },
   {
     id: 4,
-    title: "Sales",
-    link: "/sales",
-    icon: <ShopOutlined style={{ fontSize: "20px" }} />,
+    title: "Order",
+    link: "/order",
+    icon: <AppstoreOutlined style={{ fontSize: "20px" }} />,
   },
   {
     id: 5,
@@ -43,8 +43,8 @@ export const SiderBarData = [
   },
   {
     id: 7,
-    title: "Order",
-    link: "/order",
-    icon: <AppstoreOutlined style={{ fontSize: "20px" }} />,
+    title: "Sales",
+    link: "/sales",
+    icon: <ShopOutlined style={{ fontSize: "20px" }} />,
   },
 ];

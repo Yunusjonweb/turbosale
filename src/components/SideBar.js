@@ -65,13 +65,9 @@ const SideBar = () => {
         ...item,
         quanty: 1,
       };
-      const docRef = await addDoc(
-        collection(firestore, `${userEmail.email}.basket`),
-        {
-          newItem,
-        }
-      );
-      console.log(docRef);
+      await addDoc(collection(firestore, `${userEmail.email}.basket`), {
+        newItem,
+      });
       setOrder([...order, newItem]);
     } else {
       const newOrder = order.map((orderItem, index) => {

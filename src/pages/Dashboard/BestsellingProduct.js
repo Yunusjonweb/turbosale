@@ -5,7 +5,9 @@ import { BestsellingContainer } from "../../styles/components/BestsellingProduct
 export default function BestsellingProduct() {
   const { order } = useContext(ProductContext);
 
-  const filterSold = order.filter((item) => item.status === "Sotildi");
+  const filterSold = order.filter(
+    (item) => item.status === "Sotildi" && item.quanty > 8
+  );
 
   return (
     <BestsellingContainer>
@@ -26,7 +28,7 @@ export default function BestsellingProduct() {
                 />
                 <div className="products_title">{item.name}</div>
                 <div className="products_quantity">
-                  {item.quanty ? item.quanty + "Dona" : null}
+                  {item.quanty ? item.quanty + " dona" : null}
                 </div>
                 <div className="products_price">
                   {item.orginalPrice ? item.orginalPrice + "$" : null}

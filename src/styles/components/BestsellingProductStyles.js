@@ -1,6 +1,16 @@
 import styled from "styled-components";
 
 export const BestsellingContainer = styled.div`
+  .BestsellingProduct {
+    margin-top: 20px;
+  }
+
+  .product_title {
+    font-weight: 600;
+    font-size: 18px;
+    color: #1c1c1c;
+  }
+
   .BestsellingProduct_card {
     width: 480px;
     height: 60px;
@@ -21,5 +31,21 @@ export const BestsellingContainer = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 5px;
+  }
+
+  .products_title,
+  .products_quantity {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 21px;
+    text-align: center;
+    color: #040f0f;
+  }
+
+  .products_price {
+    color: #29cf3f;
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
   }
 `;

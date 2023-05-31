@@ -23,6 +23,7 @@ export const SalesColumnsData = [
       <p>
         {record
           ? ((record?.orginalPrice * record?.quanty) / record?.prosent)
+              .toFixed(2)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "USD"
           : null}

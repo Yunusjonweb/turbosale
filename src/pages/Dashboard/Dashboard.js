@@ -14,6 +14,10 @@ export default function Dashboard() {
     return sum + el.salePrice * el.quanty;
   }, 0);
 
+  const totalQuantity = filterSold.reduce((sum, el) => {
+    return sum + el.quanty;
+  }, 0);
+
   const profitPrice = filterSold.reduce((sum, el) => {
     return sum + totalPrice - el.orginalPrice;
   }, 0);
@@ -22,10 +26,12 @@ export default function Dashboard() {
     return sum + el.salePrice / el.quanty;
   }, 0);
 
-  const constPrices = costPrice
-    .toFixed(2)
-    .toString()
-    .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  const totalPrices = (value) => {
+    return value
+      .toFixed(2)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
 
   return (
     <DashboardContainer>
@@ -38,7 +44,7 @@ export default function Dashboard() {
             <div className="card_data">
               <div className="card_title">Sotilgan Mahsulot</div>
               <div className="card_numbers">
-                {order.length ? order.length : null}
+                {totalQuantity ? totalQuantity : 0}
               </div>
             </div>
           </div>
@@ -49,7 +55,7 @@ export default function Dashboard() {
             <div className="card_data">
               <div className="card_title">Xarajatlar</div>
               <div className="card_numbers">
-                {constPrices ? "$" + constPrices : null}
+                {totalPrices(costPrice) ? "$" + totalPrices(costPrice) : null}
               </div>
             </div>
           </div>
@@ -60,7 +66,9 @@ export default function Dashboard() {
             <div className="card_data">
               <div className="card_title">Foyda</div>
               <div className="card_numbers">
-                {profitPrice ? "$" + profitPrice : null}
+                {totalPrices(profitPrice)
+                  ? "$" + totalPrices(profitPrice)
+                  : null}
               </div>
             </div>
           </div>
@@ -71,7 +79,7 @@ export default function Dashboard() {
             <div className="card_data">
               <div className="card_title">Umumiy Daromad</div>
               <div className="card_numbers">
-                {totalPrice ? "$" + totalPrice : null}
+                {totalPrices(totalPrice) ? "$" + totalPrices(totalPrice) : null}
               </div>
             </div>
           </div>

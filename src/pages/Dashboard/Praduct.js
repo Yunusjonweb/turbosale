@@ -121,17 +121,8 @@ export default function Praduct() {
   };
 
   const LastAdded = () => {
-    // const productLength = filters.sort((a, b) => {
-    //   if (a > b) {
-    //     return 1;
-    //   }
-    //   if (a < b) {
-    //     return -1;
-    //   }
-    //   return 0;
-    // }, 0);
-    // console.log(productLength);
-    const productLength = filters.at(-1);
+    const productLength = filters.slice(-1);
+    console.log(productLength);
     setFilter(productLength);
   };
 

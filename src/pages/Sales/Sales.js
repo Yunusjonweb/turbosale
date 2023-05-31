@@ -6,7 +6,12 @@ import { ProductContext } from "../../context/ProductContext";
 const Sales = () => {
   const { order } = useContext(ProductContext);
 
-  const filterSold = order.filter((item) => item.status === "Sotildi");
+  const filterSold = order.filter(
+    (item) =>
+      item.status === "Sotildi" ||
+      item.status === "Kutilmoqda" ||
+      item.status === "Rad Etilgan"
+  );
 
   return <Table columns={SalesColumnsData} dataSource={filterSold} />;
 };

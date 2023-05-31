@@ -45,5 +45,6 @@ export const CategoryContainer = styled.div`
 
   .category_icon {
     font-size: 18px;
+    cursor: pointer;
   }
 `;
