@@ -32,7 +32,7 @@ export default function Praduct() {
   const [filters, setFilter] = useState([]);
   const [todos, setTodos] = useState(6);
   const [current, setCurrent] = useState(1);
-  const { product, setProduct } = useContext(AppContext);
+  const { product } = useContext(AppContext);
   const loader = [];
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Praduct() {
     const q = await query(products, orderBy("name"), limit(6));
     const docs = await getDocs(q);
     const productSort = docs.docs.map((doc) => doc.data());
-    setProduct(productSort);
+    setFilter(productSort);
   };
 
   const prevHandlerPage = () => {
@@ -73,9 +73,8 @@ export default function Praduct() {
   };
 
   const plusHandle = (id) => {
-    const userDatas = product.map((user) => {
+    const userDatas = filters.map((user) => {
       if (user.id === id) {
-        console.log(user.id, id);
         const newQuanty = user.quanty + 1;
         return {
           ...user,
@@ -85,11 +84,11 @@ export default function Praduct() {
         return user;
       }
     });
-    setProduct(userDatas);
+    setFilter(userDatas);
   };
 
   const minusHandle = (id) => {
-    const userDatas = product.map((user) => {
+    const userDatas = filters.map((user) => {
       console.log(user);
       if (user.id === id) {
         const newQuanty = user.quanty - 1;
@@ -101,36 +100,39 @@ export default function Praduct() {
         return user;
       }
     });
-    setProduct(userDatas);
+    setFilter(userDatas);
   };
 
   const CategoryFilter = (value) => {
     if (value === "All") {
       return setFilter(product);
     } else {
-      const productFilter = product.filter((item) => item.select === value);
+      const productFilter = filters.filter((item) => item.select === value);
       setFilter(productFilter);
     }
   };
 
-  const PriceFilter = async () => {
-    const citiesRef = collection(firestore, `${userEmail.email}.product`);
-    const q = query(
-      citiesRef,
-      where("orginalPrice", "===", 900),
-      orderBy("orginalPrice"),
-      limit(2)
+  const PriceFilter = () => {
+    const priceSort = filters.sort(
+      (a, b) => parseFloat(a.salePrice) - parseFloat(b.salePrice)
     );
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      console.log(doc.id, " => ", doc.data());
-    });
+    setFilter([...priceSort]);
+    console.log(priceSort);
   };
 
   const LastAdded = () => {
-    const productLength = product.slice();
-    console.log(productLength);
-    setProduct(productLength);
+    // const productLength = filters.sort((a, b) => {
+    //   if (a > b) {
+    //     return 1;
+    //   }
+    //   if (a < b) {
+    //     return -1;
+    //   }
+    //   return 0;
+    // }, 0);
+    // console.log(productLength);
+    const productLength = filters.at(-1);
+    setFilter(productLength);
   };
 
   return (
@@ -188,7 +190,11 @@ export default function Praduct() {
                     >
                       <img
                         alt="example"
-                        src={item?.img}
+                        src={
+                          item?.img
+                            ? item?.img
+                            : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAYFBMVEXa2tpVVVXd3d1OTk5SUlJwcHC1tbVLS0uOjo7h4eGcnJxWVlbU1NRaWlphYWGnp6fHx8e8vLxra2umpqa5ubnOzs51dXWvr6+WlpaGhobDw8OAgIBkZGR7e3uQkJBERETECcahAAACeUlEQVR4nO3b6W6qQBiAYWaxw7gdxAXc2vu/y4qIgIKpQo7x433+lUaTeYPDDGIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQffo3WN5jV7Go/74dw/nJXrsbH8+tYFRvZnQgAY0kNDAuE4kNLDp6quDxVxAA5P4LmsjP7cCGvzrtMajwTAb3G4NhtdAB7skWVdfMLgGOhqdroY2rBwaWgMd2fOA3aY8NrgGG5uviFz5mqE1WBeLaxtfhzywBnrliu3B7HpwaA12RQM7l/xZ0Kv9gyTzy3xgQsmfBR27sHU4epmfCNauBZ8HOnHKpa3j8Wl2C9KoRfkSeQ2Cw2lEbtx+Juy28SitLhTFNfD5ye6W7RG897UJQ1yDYHaZ85L6kB5Mk9Ia+LRYBP181SbKRfu7SGswVVd2URnU1O5bv0wT1sBvKzea3a48PUJj4mlLBFkN9Lp6r91OouJ45LKV4bo5grAGe6uqEYqFUL5btGbXGEFUg3I3cN0UnCPoL3NpkjSNU1QDP7LqNsJ5Eig2Cc1rJ0kNKhvjMsJpJvTj8rgL7z8OkhoE8e1pkP1vdLouVv52x7vlkqAG2WapgTlua2nur5GSGkyaEmQz4e0cEdUjyGng//w9vLWr2nDlNJjO/pggWyjUrpFiGujomccxajdZBtpAua3A+0hPNlBuc708SGrQsDp4wByKLZSgBmr2nMnssoUS0+B0YXhe/i6CGryMBlIaJL6Tg4AG9vgddvCdrzA/u4Hq+NC+ktCgFzSgAQ0+u0H60+2p/ZoPbRB1eWb/1qf+uK9P7x4MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwHvzkNNPrHNmiDAAAAAElFTkSuQmCC"
+                        }
                         className="praducts_img"
                       />
                     </NavLink>

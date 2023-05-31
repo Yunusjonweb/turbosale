@@ -47,10 +47,4 @@ export const SiderBarData = [
     link: "/order",
     icon: <AppstoreOutlined style={{ fontSize: "20px" }} />,
   },
-  {
-    id: 8,
-    title: "Coupons",
-    link: "/coupons",
-    icon: <ShoppingCartOutlined style={{ fontSize: "20px" }} />,
-  },
 ];

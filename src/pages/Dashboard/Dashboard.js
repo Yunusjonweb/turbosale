@@ -4,6 +4,7 @@ import VerticalComp from "./Charts/VerticalComp";
 import { DashboardContainer } from "../../styles/components/DashboardStyles";
 import { ProductContext } from "../../context/ProductContext";
 import { Costs, Marja, SoldProduct, TotalIncome } from "../../utils/Images";
+import BestsellingProduct from "./BestsellingProduct";
 
 export default function Dashboard() {
   const { order } = useContext(ProductContext);
@@ -36,7 +37,9 @@ export default function Dashboard() {
             </div>
             <div className="card_data">
               <div className="card_title">Sotilgan Mahsulot</div>
-              <div className="card_numbers">{order.length}</div>
+              <div className="card_numbers">
+                {order.length ? order.length : null}
+              </div>
             </div>
           </div>
           <div className="card">
@@ -83,6 +86,7 @@ export default function Dashboard() {
             <ChartsComp />
           </div>
         </div>
+        <BestsellingProduct />
       </div>
     </DashboardContainer>
   );

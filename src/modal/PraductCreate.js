@@ -34,6 +34,14 @@ export default function PraductCreate({ open, setOpen }) {
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
+  let dateObj = new Date();
+  const hour = dateObj.getHours();
+  const minute = dateObj.getMinutes();
+  const seconds = dateObj.getSeconds();
+  const nowTime = hour + ":" + minute + ":" + seconds;
+
+  const nowTimes = Date.now();
+
   const onFinish = async () => {
     try {
       const docRef = await addDoc(
@@ -41,6 +49,7 @@ export default function PraductCreate({ open, setOpen }) {
         {
           quanty: 0,
           select: selectValue,
+          time: nowTimes,
           img: url,
           ...form.getFieldsValue(),
         }

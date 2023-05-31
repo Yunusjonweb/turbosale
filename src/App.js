@@ -33,7 +33,7 @@ function App() {
         navigate("/register");
       }
     });
-  }, []);
+  });
 
   useEffect(() => {
     getDocs(colRef)
@@ -48,7 +48,7 @@ function App() {
         console.log(err.message);
       });
     onSnapshot(colRef);
-  }, [product]);
+  }, []);
 
   if (!dataUsers.token) {
     return (

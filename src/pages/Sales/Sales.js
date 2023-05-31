@@ -6,6 +6,8 @@ import { ProductContext } from "../../context/ProductContext";
 const Sales = () => {
   const { order } = useContext(ProductContext);
 
-  return <Table columns={SalesColumnsData} dataSource={order} />;
+  const filterSold = order.filter((item) => item.status === "Sotildi");
+
+  return <Table columns={SalesColumnsData} dataSource={filterSold} />;
 };
 export default Sales;
