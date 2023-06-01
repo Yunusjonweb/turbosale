@@ -1,5 +1,6 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
+import { FormContainer } from "../styles/components/FormStyles";
 import { SupplierUpdate } from "./SupplierUpdate";
 
 export default function SuppliearEdit({ open, setOpen, id }) {
@@ -29,36 +30,75 @@ export default function SuppliearEdit({ open, setOpen, id }) {
         title="Maxsulotlarni malumotlarni taxirilash"
         centered
         open={open}
-        onOk={() => onFinish()}
-        onCancel={() => handleCancel()}
-        okText="Saqlash"
-        cancelText="Bekor qilish"
+        footer={null}
       >
-        <Form
-          layout="vertical"
-          name="nest-messages"
-          style={{
-            maxWidth: 600,
-          }}
-          form={form}
-          setFields={form.getFieldsValue}
-        >
-          <Form.Item label="Supplier Name" name={"supplierName"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Adress" name={"adress"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Product" name={"product"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Phone" name={"phone"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Quantity" name={"quantity"}>
-            <Input />
-          </Form.Item>
-        </Form>
+        <FormContainer>
+          <Form
+            layout="vertical"
+            name="nest-messages"
+            style={{
+              maxWidth: 600,
+              height: 460,
+            }}
+            form={form}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              label="Supplier Name"
+              name={"supplierName"}
+              rules={[{ required: true, message: "Write your supplier name!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Adress"
+              name={"adress"}
+              rules={[{ required: true, message: "Write your adress name!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Product"
+              name={"product"}
+              rules={[{ required: true, message: "Write your product name!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Phone"
+              name={"phone"}
+              rules={[{ required: true, message: "Write your phone number!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Quantity"
+              name={"quantity"}
+              rules={[
+                { required: true, message: "Write your quantity number!" },
+              ]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <div className="form_btns">
+              <Button type="primary" htmlType="submit" className="btn">
+                Save
+              </Button>
+              <Button
+                htmlType="submit"
+                onClick={() => handleCancel()}
+                className="btn"
+              >
+                Close
+              </Button>
+            </div>
+          </Form>
+        </FormContainer>
       </Modal>
       <li onClick={showModal}>Edit</li>
     </div>

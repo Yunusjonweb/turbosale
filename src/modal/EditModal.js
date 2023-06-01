@@ -1,6 +1,7 @@
+import { UpdateData } from "./Update";
 import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
-import { UpdateData } from "./Update";
+import { FormContainer } from "../styles/components/FormStyles";
 
 export default function EditModal({ modal2Open, setModal2Open, id }) {
   const [form] = Form.useForm();
@@ -29,36 +30,73 @@ export default function EditModal({ modal2Open, setModal2Open, id }) {
         title="Maxsulotlarni malumotlarni taxirilash"
         centered
         open={modal2Open}
-        onOk={() => onFinish()}
-        onCancel={() => handleCancel()}
-        okText="Saqlash"
-        cancelText="Bekor qilish"
+        footer={null}
       >
-        <Form
-          layout="vertical"
-          name="nest-messages"
-          style={{
-            maxWidth: 600,
-          }}
-          form={form}
-          setFields={form.getFieldsValue}
-        >
-          <Form.Item label="Mahsulot nomi" name={"name"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Asl Narxi" name={"orginalPrice"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Sotuv narxi" name={"salePrice"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Miqdori" name={"quantity"}>
-            <Input />
-          </Form.Item>
-          <Form.Item label="Tasnif" name={"textArea"}>
-            <Input.TextArea />
-          </Form.Item>
-        </Form>
+        <FormContainer>
+          <Form
+            layout="vertical"
+            name="nest-messages"
+            style={{
+              maxWidth: 600,
+              height: 490,
+            }}
+            form={form}
+            onFinish={onFinish}
+          >
+            <Form.Item
+              label="Mahsulot nomi"
+              name={"name"}
+              rules={[{ required: true, message: "Write a product name!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Asl Narxi"
+              name={"orginalPrice"}
+              rules={[{ required: true, message: "Write a original price!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Sotuv narxi"
+              name={"salePrice"}
+              rules={[{ required: true, message: "Write a sale price!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Miqdori"
+              name={"quantity"}
+              rules={[{ required: true, message: "Write a quantity!" }]}
+              hasFeedback
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              label="Tasnif"
+              name={"textArea"}
+              rules={[{ required: true, message: "Write a textarea!" }]}
+              hasFeedback
+            >
+              <Input.TextArea />
+            </Form.Item>
+            <div className="form_btns">
+              <Button type="primary" htmlType="submit" className="btn">
+                Save
+              </Button>
+              <Button
+                htmlType="submit"
+                onClick={() => handleCancel()}
+                className="btn"
+              >
+                Close
+              </Button>
+            </div>
+          </Form>
+        </FormContainer>
       </Modal>
       <Button onClick={showModal}>
         <EditOutlined /> Edit
