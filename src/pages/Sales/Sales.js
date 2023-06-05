@@ -5,6 +5,7 @@ import { ProductContext } from "../../context/ProductContext";
 
 const Sales = () => {
   const { order } = useContext(ProductContext);
+  // console.log(order);
 
   const filterSold = order.filter(
     (item) =>

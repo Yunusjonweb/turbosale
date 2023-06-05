@@ -117,7 +117,6 @@ export default function Praduct() {
       (a, b) => parseFloat(a.salePrice) - parseFloat(b.salePrice)
     );
     setFilter([...priceSort]);
-    console.log(priceSort);
   };
 
   const LastAdded = () => {

@@ -42,11 +42,13 @@ const Supplier = () => {
         console.log(err.message);
       });
     onSnapshot(colRef);
-  }, []);
+  }, [supplier]);
 
   useEffect(() => {
     setFilter(supplier);
   }, [supplier]);
+
+  // console.log(supplier);
 
   const deleteItem = async (userId) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.supplier`, userId));

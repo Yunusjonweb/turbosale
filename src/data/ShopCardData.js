@@ -26,9 +26,9 @@ export const ShopCardData = (plusHandler, minusHandle, deleteItem) => [
           justifyContent: "space-around",
         }}
       >
-        <Button onClick={() => minusHandle(record?.id)}>-</Button>
+        <Button onClick={() => minusHandle(record?.id, record?.idd)}>-</Button>
         <p>{record?.quanty ? record?.quanty + "x" : null}</p>
-        <Button onClick={() => plusHandler(record?.id)}>+</Button>
+        <Button onClick={() => plusHandler(record?.id, record?.idd)}>+</Button>
       </div>
     ),
   },

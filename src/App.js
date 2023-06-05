@@ -23,18 +23,6 @@ function App() {
 
   const colRef = collection(firestore, `${userEmail.email}.product`);
 
-  // useEffect(() => {
-  //   const auth = getAuth();
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user.uid) {
-  //       const uid = user.email.toString();
-  //     } else {
-  //       console.log("ole");
-  //       navigate("/register");
-  //     }
-  //   });
-  // });
-
   useEffect(() => {
     getDocs(colRef)
       .then((snapshot) => {
@@ -48,7 +36,7 @@ function App() {
         console.log(err.message);
       });
     onSnapshot(colRef);
-  }, []);
+  }, [product]);
 
   if (!dataUsers.token) {
     return (

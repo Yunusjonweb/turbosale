@@ -5,7 +5,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { ShopCardContainer } from "../../styles/components/ShopCardStyles";
 import { ProductContext } from "../../context/ProductContext";
 import { ShopCardData } from "../../data/ShopCardData";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
 
 export default function ShopCard() {
@@ -13,19 +13,23 @@ export default function ShopCard() {
   const goBack = () => navigate(-1);
   const { order, setOrder } = useContext(ProductContext);
 
-  const plusHandle = (id) => {
-    const userDatas = order.map((user) => {
-      if (user.id === id) {
-        const newQuanty = user.quanty + 1;
-        return {
-          ...user,
-          quanty: newQuanty,
-        };
-      } else {
-        return user;
-      }
-    });
-    setOrder(userDatas);
+  const plusHandle = async (id, idd) => {
+    console.log(idd, id);
+    const washingtongRef = doc(firestore, `${userEmail.email}.basket`, id);
+    const product = await getDoc(washingtongRef);
+    const qty = product.data().quanty;
+    const washingtongReff = doc(firestore, `${userEmail.email}.product`, idd);
+    const productt = await getDoc(washingtongReff);
+    const qtyy = productt.data().quantity;
+    console.log(productt.data());
+    if (qtyy != 0) {
+      await updateDoc(washingtongRef, {
+        quanty: qty + 1,
+      });
+      await updateDoc(washingtongReff, {
+        quanty: qty - 1,
+      });
+    }
   };
 
   const minusHandle = (id) => {
@@ -45,7 +49,7 @@ export default function ShopCard() {
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
-  const deleteItem = async (userId) => {
+  const deleteItem = async (userId, idd) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.basket`, userId));
   };
 

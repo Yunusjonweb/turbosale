@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { ProductContext } from "../../../context/ProductContext";
 import { OrderColumnsData } from "../../../data/OrderColumnsData";
 
@@ -33,6 +33,8 @@ const Order = () => {
     });
     setOrder(newState);
   };
+
+  // console.log(order);
 
   return (
     <Table

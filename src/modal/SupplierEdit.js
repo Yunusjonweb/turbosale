@@ -1,4 +1,4 @@
-import { EditOutlined } from "@ant-design/icons";
+import InputMask from "react-input-mask";
 import { Modal, Form, Input, Button } from "antd";
 import { FormContainer } from "../styles/components/FormStyles";
 import { SupplierUpdate } from "./SupplierUpdate";
@@ -69,11 +69,17 @@ export default function SuppliearEdit({ open, setOpen, id }) {
             </Form.Item>
             <Form.Item
               label="Phone"
-              name={"phone"}
-              rules={[{ required: true, message: "Write your phone number!" }]}
+              name="phone"
+              rules={[
+                { required: true, message: "Write down the phone number!" },
+              ]}
               hasFeedback
             >
-              <Input />
+              <InputMask
+                mask="+998 (99) 999-99-99"
+                maskChar={null}
+                className="ant-input css-dev-only-do-not-override-k7429z"
+              />
             </Form.Item>
             <Form.Item
               label="Quantity"

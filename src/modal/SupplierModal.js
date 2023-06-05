@@ -1,3 +1,4 @@
+import InputMask from "react-input-mask";
 import { Modal, Form, Input, Button } from "antd";
 import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -80,6 +81,7 @@ export default function SupplierModal({ modal2Open, setModal2Open }) {
               display: "flex",
               justifyContent: "space-between",
             }}
+            onFinish={onFinish}
           >
             <div className="form">
               <Form.Item>
@@ -100,24 +102,68 @@ export default function SupplierModal({ modal2Open, setModal2Open }) {
               </Form.Item>
             </div>
             <div className="form_item">
-              <Form.Item name="supplierName" label="Supplier name">
+              <Form.Item
+                name="supplierName"
+                label="Supplier name"
+                rules={[
+                  { required: true, message: "Write down the Supplier name!" },
+                ]}
+                hasFeedback
+              >
                 <Input name={"supplierName"} />
               </Form.Item>
-              <Form.Item name="adress" label="Adress">
+              <Form.Item
+                name="adress"
+                label="Adress"
+                rules={[
+                  { required: true, message: "Write down the Adress name!" },
+                ]}
+                hasFeedback
+              >
                 <Input name={"adress"} />
               </Form.Item>
-              <Form.Item name="product" label="Product">
+              <Form.Item
+                name="product"
+                label="Product"
+                rules={[
+                  { required: true, message: "Write down the Product name!" },
+                ]}
+                hasFeedback
+              >
                 <Input name={"product"} />
               </Form.Item>
             </div>
             <div className="form_item">
-              <Form.Item name="phone" label="Phone">
-                <Input name={"phone"} />
+              <Form.Item
+                label="Phone"
+                name="phone"
+                rules={[
+                  { required: true, message: "Write down the phone number!" },
+                ]}
+                hasFeedback
+              >
+                <InputMask
+                  mask="+998 (99) 999-99-99"
+                  maskChar={null}
+                  className="ant-input css-dev-only-do-not-override-k7429z"
+                />
               </Form.Item>
-              <Form.Item name="price" label="Narxi">
+              <Form.Item
+                name="price"
+                label="Narxi"
+                rules={[{ required: true, message: "Write down the Price!" }]}
+                hasFeedback
+              >
                 <Input name={"price"} />
               </Form.Item>
-              <Form.Item name="quantity" label="Miqdori">
+              <Form.Item
+                name="quantity"
+                label="Miqdori"
+                rules={[
+                  { required: true, message: "Write down the Quantity!" },
+                ]}
+                hasFeedback
+              >
                 <Input name={"quantity"} />
               </Form.Item>
               <div className="form_btns">

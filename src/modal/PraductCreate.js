@@ -1,44 +1,21 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useState, useRef, useEffect } from "react";
 import { Form, Input, Select, Modal, Button } from "antd";
 import { PraductCreateContainer } from "../styles/components/PraductCreateStyles";
 import { AppContext } from "../context/ContextProvider";
 import { collection, addDoc } from "firebase/firestore";
-import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { firestore, storage } from "../firebase/firebase";
 import { FormContainer } from "../styles/components/FormStyles";
-
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
   const [form] = Form.useForm();
-  const [url, setUrl] = useState(null);
+  const [file, setFile] = useState(null);
+  const [percent, setPercent] = useState(null);
   const { setProduct } = useContext(AppContext);
-  const inputRef = useRef(null);
   const [selectValue, setSelectValue] = useState(null);
 
-  const handleImagesChange = (e) => {
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    setUrl(url);
-    handleClick(file);
-  };
-
-  const handleClick = (file) => {
-    const storageRef = ref(storage, `images/${file}`);
-    uploadBytes(storageRef, file).then(() => {
-      getDownloadURL(storageRef).then((urls) => {
-        setUrl(urls);
-      });
-    });
-    inputRef.current.click();
-  };
-
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
-
-  let dateObj = new Date();
-  const hour = dateObj.getHours();
-  const minute = dateObj.getMinutes();
-  const seconds = dateObj.getSeconds();
 
   const nowTimes = Date.now();
 
@@ -50,7 +27,7 @@ export default function PraductCreate({ open, setOpen }) {
           quanty: 0,
           select: selectValue,
           time: nowTimes,
-          img: url,
+          img: file,
           ...form.getFieldsValue(),
         }
       );
@@ -58,7 +35,7 @@ export default function PraductCreate({ open, setOpen }) {
         ...prevProduct,
         {
           ...form.getFieldsValue(),
-          img: url,
+          img: file,
           select: selectValue,
           id: docRef.id,
         },
@@ -67,6 +44,37 @@ export default function PraductCreate({ open, setOpen }) {
       console.error("Error adding document: ", e);
     }
     setOpen(false);
+  };
+
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+  }
+
+  const handleUpload = () => {
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const storageRef = ref(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+
+        // update progress
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          setFile(url);
+        });
+      }
+    );
   };
 
   return (
@@ -85,8 +93,8 @@ export default function PraductCreate({ open, setOpen }) {
               onFinish={onFinish}
             >
               <div className="form">
-                <Form.Item>
-                  <div onClick={handleClick}>
+                {/* <Form.Item> */}
+                {/* <div onClick={uploadImage}>
                     <img
                       src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAYFBMVEXa2tpVVVXd3d1OTk5SUlJwcHC1tbVLS0uOjo7h4eGcnJxWVlbU1NRaWlphYWGnp6fHx8e8vLxra2umpqa5ubnOzs51dXWvr6+WlpaGhobDw8OAgIBkZGR7e3uQkJBERETECcahAAACeUlEQVR4nO3b6W6qQBiAYWaxw7gdxAXc2vu/y4qIgIKpQo7x433+lUaTeYPDDGIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQffo3WN5jV7Go/74dw/nJXrsbH8+tYFRvZnQgAY0kNDAuE4kNLDp6quDxVxAA5P4LmsjP7cCGvzrtMajwTAb3G4NhtdAB7skWVdfMLgGOhqdroY2rBwaWgMd2fOA3aY8NrgGG5uviFz5mqE1WBeLaxtfhzywBnrliu3B7HpwaA12RQM7l/xZ0Kv9gyTzy3xgQsmfBR27sHU4epmfCNauBZ8HOnHKpa3j8Wl2C9KoRfkSeQ2Cw2lEbtx+Juy28SitLhTFNfD5ye6W7RG897UJQ1yDYHaZ85L6kB5Mk9Ia+LRYBP181SbKRfu7SGswVVd2URnU1O5bv0wT1sBvKzea3a48PUJj4mlLBFkN9Lp6r91OouJ45LKV4bo5grAGe6uqEYqFUL5btGbXGEFUg3I3cN0UnCPoL3NpkjSNU1QDP7LqNsJ5Eig2Cc1rJ0kNKhvjMsJpJvTj8rgL7z8OkhoE8e1pkP1vdLouVv52x7vlkqAG2WapgTlua2nur5GSGkyaEmQz4e0cEdUjyGng//w9vLWr2nDlNJjO/pggWyjUrpFiGujomccxajdZBtpAua3A+0hPNlBuc708SGrQsDp4wByKLZSgBmr2nMnssoUS0+B0YXhe/i6CGryMBlIaJL6Tg4AG9vgddvCdrzA/u4Hq+NC+ktCgFzSgAQ0+u0H60+2p/ZoPbRB1eWb/1qf+uK9P7x4MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwHvzkNNPrHNmiDAAAAAElFTkSuQmCC"
                       alt="rasim"
@@ -95,11 +103,16 @@ export default function PraductCreate({ open, setOpen }) {
                     <input
                       type="file"
                       ref={inputRef}
-                      onChange={handleImagesChange}
+                      onChange={(e) => {
+                        setSelectValue(e.target.files);
+                      }}
                       style={{ display: "none" }}
                     />
                   </div>
-                </Form.Item>
+                </Form.Item> */}
+
+                <input type="file" accept="image/*" onChange={handleChange} />
+                <button onClick={handleUpload}>Upload</button>
                 <Form.Item
                   name="name"
                   label="Mahsulot nomi"

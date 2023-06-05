@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Routes, Route, Link, useLocation } from "react-router-dom";
 import Praduct from "../pages/Dashboard/Praduct";
 import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
@@ -19,7 +19,15 @@ import Clients from "../pages/Dashboard/Clients/Clients";
 import Order from "../pages/Dashboard/Order/Order";
 import Supplier from "../pages/Dashboard/Supplier/Supplier";
 import Category from "../pages/Dashboard/Category/Category";
-import { addDoc, collection } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import ClientsView from "../pages/Dashboard/Clients/ClientsView";
 import SupplierView from "../pages/Dashboard/Supplier/SupplierView";
@@ -58,29 +66,58 @@ const SideBar = () => {
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
+  const colRef = collection(firestore, `${userEmail.email}.basket`);
+
+  useEffect(() => {
+    getDocs(colRef)
+      .then((snapshot) => {
+        let product = [];
+        snapshot.forEach((item) => {
+          product.push({ ...item.data(), id: item.id });
+        });
+        setOrder(product);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    onSnapshot(colRef);
+  }, [order]);
+
   const addToBasket = async (item) => {
-    const itemIndex = order.findIndex((orderItem) => orderItem.id === item.id);
-    if (itemIndex < 0) {
-      const newItem = {
-        ...item,
-        quanty: 1,
-      };
+    const { id, img, name, orginalPrice, salePrice, prosent, date } = item;
+    const product = doc(firestore, `${userEmail.email}.product`, id);
+    const productAdd = await getDoc(product);
+    const quantity1 = productAdd.data().quantity;
+    const filter = order.filter((filterItem) => filterItem.idd === item.id);
+
+    if (filter.length === 0) {
       await addDoc(collection(firestore, `${userEmail.email}.basket`), {
-        newItem,
+        idd: id,
+        name: name,
+        img: img,
+        orginalPrice: orginalPrice,
+        salePrice: salePrice,
+        date: date,
+        quanty: 1,
+        prosent: prosent,
       });
-      setOrder([...order, newItem]);
+      await updateDoc(product, {
+        quantity: +quantity1 - 1,
+      });
     } else {
-      const newOrder = order.map((orderItem, index) => {
-        if (index === itemIndex) {
-          return {
-            ...orderItem,
-            quanty: orderItem.quanty + 1,
-          };
-        } else {
-          return item;
-        }
-      });
-      setOrder(newOrder);
+      if (quantity1 != 0) {
+        const washingtongRef = doc(
+          firestore,
+          `${userEmail.email}.basket`,
+          filter.id
+        );
+        await updateDoc(washingtongRef, {
+          quanty: filter.quanty + 1,
+        });
+        await updateDoc(product, {
+          quantity: quantity1 - 1,
+        });
+      }
     }
   };
 
