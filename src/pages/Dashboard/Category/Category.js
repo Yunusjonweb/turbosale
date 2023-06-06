@@ -12,6 +12,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { firestore } from "../../../firebase/firebase";
+import Loader from "../../../components/Loader";
 
 export default function Category() {
   const [form] = Form.useForm();
@@ -92,19 +93,23 @@ export default function Category() {
           </Modal>
         </div>
         <div className="category_cards">
-          {category.map((item) => (
-            <div className="category_card">
-              <div className="category_title" key={item.id}>
-                {item.categoryName}
+          {category.length ? (
+            category.map((item) => (
+              <div className="category_card">
+                <div className="category_title" key={item.id}>
+                  {item.categoryName}
+                </div>
+                <div
+                  className="category_icon"
+                  onClick={() => deleteCategory(item.id)}
+                >
+                  <CloseOutlined />
+                </div>
               </div>
-              <div
-                className="category_icon"
-                onClick={() => deleteCategory(item.id)}
-              >
-                <CloseOutlined />
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <Loader />
+          )}
         </div>
       </div>
     </CategoryContainer>

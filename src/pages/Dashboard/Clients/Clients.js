@@ -13,6 +13,7 @@ import { firestore } from "../../../firebase/firebase";
 import ClientsModal from "../../../modal/ClientsModal";
 import { SupplierContainer } from "../../../styles/components/SupplierStyles";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader";
 
 const Clients = () => {
   const navigate = useNavigate();
@@ -72,12 +73,16 @@ const Clients = () => {
             />
           </div>
         </div>
-        <Table
-          columns={ClientsColumnsData(deleteItem, addToBasket, open, setOpen)}
-          dataSource={clients.filter((item) => {
-            return item.name.toLowerCase().includes(search.toLowerCase());
-          })}
-        />
+        {clients.length ? (
+          <Table
+            columns={ClientsColumnsData(deleteItem, addToBasket, open, setOpen)}
+            dataSource={clients.filter((item) => {
+              return item.name.toLowerCase().includes(search.toLowerCase());
+            })}
+          />
+        ) : (
+          <Loader />
+        )}
       </div>
     </SupplierContainer>
   );

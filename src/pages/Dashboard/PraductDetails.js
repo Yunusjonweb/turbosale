@@ -122,6 +122,7 @@ export default function PraductDetails() {
                       email: userEmail.email,
                       salePrice: item.salePrice,
                       orginalPrice: item.orginalPrice,
+                      status: "Kutilmoqda",
                       date: nowdate,
                     })
                   }

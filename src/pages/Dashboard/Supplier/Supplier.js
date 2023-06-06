@@ -12,6 +12,7 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader";
 import { SupplierColumnsData } from "../../../data/SupplierData";
 import { firestore } from "../../../firebase/firebase";
 import SupplierModal from "../../../modal/SupplierModal";
@@ -93,12 +94,21 @@ const Supplier = () => {
             />
           </div>
         </div>
-        <Table
-          columns={SupplierColumnsData(deleteItem, addToBasket, open, setOpen)}
-          dataSource={filter.filter((item) =>
-            item.supplierName.toLowerCase().includes(search.toLowerCase())
-          )}
-        />
+        {supplier.length ? (
+          <Table
+            columns={SupplierColumnsData(
+              deleteItem,
+              addToBasket,
+              open,
+              setOpen
+            )}
+            dataSource={filter.filter((item) =>
+              item.supplierName.toLowerCase().includes(search.toLowerCase())
+            )}
+          />
+        ) : (
+          <Loader />
+        )}
       </div>
     </SupplierContainer>
   );

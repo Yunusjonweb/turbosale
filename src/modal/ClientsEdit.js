@@ -24,12 +24,7 @@ export default function ClientsEdit({ open, setOpen, id }) {
 
   return (
     <div className="modal">
-      <Modal
-        title="Maxsulotlarni malumotlarni taxirilash"
-        centered
-        open={open}
-        footer={null}
-      >
+      <Modal title="Clients data edit" centered open={open} footer={null}>
         <FormContainer>
           <Form
             layout="vertical"

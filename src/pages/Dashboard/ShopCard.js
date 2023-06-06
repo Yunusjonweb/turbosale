@@ -1,27 +1,56 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { ShopCardContainer } from "../../styles/components/ShopCardStyles";
 import { ProductContext } from "../../context/ProductContext";
 import { ShopCardData } from "../../data/ShopCardData";
-import { deleteDoc, doc, getDoc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
+import Loader from "../../components/Loader";
 
 export default function ShopCard() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
-  const { order, setOrder } = useContext(ProductContext);
+  const [loader, setLoader] = useState(false);
+  const [basket, setBasket] = useState([]);
+
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+
+  const colRef = collection(firestore, `${userEmail.email}.basket`);
+
+  useEffect(() => {
+    setLoader(false);
+    getDocs(colRef)
+      .then((snapshot) => {
+        let product = [];
+        snapshot.forEach((item) => {
+          product.push({ ...item.data(), id: item.id });
+        });
+        setBasket(product);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    onSnapshot(colRef);
+  }, [loader]);
 
   const plusHandle = async (id, idd) => {
-    console.log(idd, id);
+    setLoader(true);
     const washingtongRef = doc(firestore, `${userEmail.email}.basket`, id);
     const product = await getDoc(washingtongRef);
     const qty = product.data().quanty;
     const washingtongReff = doc(firestore, `${userEmail.email}.product`, idd);
     const productt = await getDoc(washingtongReff);
     const qtyy = productt.data().quantity;
-    console.log(productt.data());
     if (qtyy != 0) {
       await updateDoc(washingtongRef, {
         quanty: qty + 1,
@@ -30,40 +59,47 @@ export default function ShopCard() {
         quanty: qty - 1,
       });
     }
+    setLoader(false);
   };
 
-  const minusHandle = (id) => {
-    const userDatas = order.map((user) => {
-      if (user.id === id) {
-        const newQuanty = user.quanty - 1;
-        return {
-          ...user,
-          quanty: newQuanty >= 0 ? newQuanty : 0,
-        };
-      } else {
-        return user;
-      }
-    });
-    setOrder(userDatas);
+  const minusHandle = async (id, idd) => {
+    setLoader(true);
+    const washingtongRef = doc(firestore, `${userEmail.email}.basket`, id);
+    const product = await getDoc(washingtongRef);
+    const qty = product.data().quanty;
+    const washingtongReff = doc(firestore, `${userEmail.email}.product`, idd);
+    const productt = await getDoc(washingtongReff);
+    const qtyy = productt.data().quantity;
+    if (qtyy != 0) {
+      await updateDoc(washingtongRef, {
+        quanty: qty - 1,
+      });
+      await updateDoc(washingtongReff, {
+        quanty: qty + 1,
+      });
+    }
+    setLoader(false);
   };
 
-  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
-
-  const deleteItem = async (userId, idd) => {
+  const deleteItem = async (userId) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.basket`, userId));
   };
 
-  const totalPrice = order.reduce((sum, el) => {
+  const totalPrice = basket.reduce((sum, el) => {
     return sum + el.salePrice * el.quanty;
   }, 0);
 
   return (
     <ShopCardContainer>
       <div className="shopCard_section">
-        <Table
-          columns={ShopCardData(plusHandle, minusHandle, deleteItem)}
-          dataSource={order}
-        />
+        {loader === true ? (
+          <Loader />
+        ) : (
+          <Table
+            columns={ShopCardData(plusHandle, minusHandle, deleteItem)}
+            dataSource={basket}
+          />
+        )}
         <h2 className="totalPrice_title">
           {totalPrice
             ? "Total price:" +

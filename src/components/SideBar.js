@@ -31,11 +31,13 @@ import {
 import { firestore } from "../firebase/firebase";
 import ClientsView from "../pages/Dashboard/Clients/ClientsView";
 import SupplierView from "../pages/Dashboard/Supplier/SupplierView";
+import Loader from "./Loader";
 const { Header, Content, Sider } = Layout;
 
 const SideBar = () => {
   const { pathname } = useLocation();
   const [order, setOrder] = useState([]);
+  const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const str = pathname.slice();
   let result = str.charAt(1).toUpperCase() + str.slice(2);
@@ -84,7 +86,17 @@ const SideBar = () => {
   }, [order]);
 
   const addToBasket = async (item) => {
-    const { id, img, name, orginalPrice, salePrice, prosent, date } = item;
+    const {
+      id,
+      img,
+      name,
+      orginalPrice,
+      salePrice,
+      prosent,
+      status,
+      date,
+      email,
+    } = item;
     const product = doc(firestore, `${userEmail.email}.product`, id);
     const productAdd = await getDoc(product);
     const quantity1 = productAdd.data().quantity;
@@ -93,13 +105,15 @@ const SideBar = () => {
     if (filter.length === 0) {
       await addDoc(collection(firestore, `${userEmail.email}.basket`), {
         idd: id,
-        name: name,
         img: img,
-        orginalPrice: orginalPrice,
-        salePrice: salePrice,
-        date: date,
         quanty: 1,
+        name: name,
+        date: date,
+        email: email,
+        status: status,
         prosent: prosent,
+        salePrice: salePrice,
+        orginalPrice: orginalPrice,
       });
       await updateDoc(product, {
         quantity: +quantity1 - 1,

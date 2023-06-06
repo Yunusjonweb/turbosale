@@ -16,14 +16,7 @@ import Loader from "../../components/Loader";
 import { firestore } from "../../firebase/firebase";
 import { AppContext } from "../../context/ContextProvider";
 import { ProductContainer } from "../../styles/components/PraductStyles";
-import {
-  collection,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 const { Meta } = Card;
 const provinceData = ["All", "Stol", "Kreslo", "Devan", "Shkaf", "Xontaxta"];
 
@@ -89,7 +82,6 @@ export default function Praduct() {
 
   const minusHandle = (id) => {
     const userDatas = filters.map((user) => {
-      console.log(user);
       if (user.id === id) {
         const newQuanty = user.quanty - 1;
         return {

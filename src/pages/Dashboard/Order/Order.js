@@ -1,46 +1,43 @@
 import { Table } from "antd";
-import { useContext } from "react";
+import { deleteDoc, doc } from "firebase/firestore";
+import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../components/Loader";
 import { ProductContext } from "../../../context/ProductContext";
 import { OrderColumnsData } from "../../../data/OrderColumnsData";
+import { firestore } from "../../../firebase/firebase";
 
 const Order = () => {
-  const { order, setOrder } = useContext(ProductContext);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const { order } = useContext(ProductContext);
 
-  const optionValue = [
-    {
-      id: 1,
-      color: "#0466C8",
-      status: "Kutilmoqda",
-    },
-    {
-      id: 2,
-      color: "#29CF3F",
-      status: "Rad Etilgan",
-    },
-    {
-      id: 3,
-      color: "#E98026",
-      status: "Sotildi",
-    },
-  ];
+  const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
-  const selectFunc = (status, id) => {
-    const newState = order.map((obj) => {
-      if (obj.id === id) {
-        return { ...obj, status: status };
-      }
-      return obj;
-    });
-    setOrder(newState);
+  const deleteItem = async (userId) => {
+    await deleteDoc(doc(firestore, `${userEmail.email}.basket`, userId));
   };
 
-  // console.log(order);
+  const addToBasket = async (item) => {
+    const selectedProduct = order.filter((prod) => prod.id === item.id);
+    navigate("/clients/view", {
+      state: {
+        data: selectedProduct,
+      },
+    });
+  };
 
   return (
-    <Table
-      columns={OrderColumnsData(selectFunc, optionValue)}
-      dataSource={order}
-    />
+    <div className="order">
+      {order.length ? (
+        <Table
+          columns={OrderColumnsData(deleteItem, addToBasket, open, setOpen)}
+          dataSource={order}
+        />
+      ) : (
+        <Loader />
+      )}
+    </div>
   );
 };
 

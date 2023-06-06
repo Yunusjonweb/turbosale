@@ -1,4 +1,4 @@
-import { CloseOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
 export const ShopCardData = (plusHandler, minusHandle, deleteItem) => [
@@ -57,7 +57,7 @@ export const ShopCardData = (plusHandler, minusHandle, deleteItem) => [
     dataIndex: "tags",
     render: (_, record) => (
       <Button onClick={() => deleteItem(record?.id)}>
-        <CloseOutlined />
+        <DeleteOutlined />
       </Button>
     ),
   },

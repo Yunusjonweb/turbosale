@@ -2,18 +2,23 @@ import { Table } from "antd";
 import { SalesColumnsData } from "../../data/SalesColumnsData";
 import { useContext } from "react";
 import { ProductContext } from "../../context/ProductContext";
+import Loader from "../../components/Loader";
 
 const Sales = () => {
   const { order } = useContext(ProductContext);
-  // console.log(order);
 
   const filterSold = order.filter(
-    (item) =>
-      item.status === "Sotildi" ||
-      item.status === "Kutilmoqda" ||
-      item.status === "Rad Etilgan"
+    (item) => item.status === "Sotildi" || item.status === "Kutilmoqda"
   );
 
-  return <Table columns={SalesColumnsData} dataSource={filterSold} />;
+  return (
+    <div className="sales">
+      {order.length ? (
+        <Table columns={SalesColumnsData} dataSource={filterSold} />
+      ) : (
+        <Loader />
+      )}
+    </div>
+  );
 };
 export default Sales;

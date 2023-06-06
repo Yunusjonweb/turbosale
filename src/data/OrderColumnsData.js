@@ -1,6 +1,61 @@
-import { Select } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import { Dropdown } from "antd";
+import OrderEdit from "../modal/OrderModal";
 
-export const OrderColumnsData = (selectFunc, optionValue) => [
+const items = (
+  id,
+  name,
+  phone,
+  email,
+  deleteItem,
+  addToBasket,
+  open,
+  setOpen
+) => [
+  {
+    key: "1",
+    label: (
+      <li
+        style={{ border: "none", boxShadow: "none", width: "100%" }}
+        onClick={() =>
+          addToBasket({
+            id: id,
+            name: name,
+            email: email,
+            phone: phone,
+          })
+        }
+      >
+        View
+      </li>
+    ),
+  },
+  {
+    key: "2",
+    label: (
+      <li
+        style={{ border: "none", boxShadow: "none", width: "100%" }}
+        className="btn"
+      >
+        <OrderEdit open={open} setOpen={setOpen} id={id} />
+      </li>
+    ),
+  },
+  {
+    key: "3",
+    label: (
+      <li
+        style={{ border: "none", boxShadow: "none", width: "100%" }}
+        className="btn"
+        onClick={() => deleteItem(id)}
+      >
+        Delete
+      </li>
+    ),
+  },
+];
+
+export const OrderColumnsData = (deleteItem, addToBasket, open, setOpen) => [
   {
     title: "Full Name",
     dataIndex: "name",
@@ -21,16 +76,23 @@ export const OrderColumnsData = (selectFunc, optionValue) => [
     dataIndex: "status",
     key: "status",
     render: (_, record) => (
-      <Select
-        style={{ width: 140 }}
-        onChange={(status) => selectFunc(status, record?.id)}
+      <Dropdown
+        menu={{
+          items: items(
+            record?.id,
+            record?.name,
+            record?.email,
+            record?.phone,
+            deleteItem,
+            addToBasket,
+            open,
+            setOpen
+          ),
+        }}
+        placement="bottomLeft"
       >
-        {optionValue.map((item) => (
-          <Select.Option style={{ color: item.color }} key={item.status}>
-            {item.status}
-          </Select.Option>
-        ))}
-      </Select>
+        <MoreOutlined />
+      </Dropdown>
     ),
   },
 ];
