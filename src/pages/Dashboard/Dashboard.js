@@ -5,6 +5,7 @@ import { DashboardContainer } from "../../styles/components/DashboardStyles";
 import { ProductContext } from "../../context/ProductContext";
 import { Costs, Marja, SoldProduct, TotalIncome } from "../../utils/Images";
 import BestsellingProduct from "./BestsellingProduct";
+import ClientsLot from "./ClientsLot";
 
 export default function Dashboard() {
   const { order } = useContext(ProductContext);
@@ -94,7 +95,10 @@ export default function Dashboard() {
             <ChartsComp />
           </div>
         </div>
-        <BestsellingProduct />
+        <div className="product_statistic">
+          <BestsellingProduct />
+          <ClientsLot />
+        </div>
       </div>
     </DashboardContainer>
   );

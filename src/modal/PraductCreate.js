@@ -1,17 +1,11 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Input, Select, Modal, Button } from "antd";
 import { PraductCreateContainer } from "../styles/components/PraductCreateStyles";
 import { AppContext } from "../context/ContextProvider";
 import { collection, addDoc } from "firebase/firestore";
 import { firestore, storage } from "../firebase/firebase";
 import { FormContainer } from "../styles/components/FormStyles";
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
@@ -20,65 +14,9 @@ export default function PraductCreate({ open, setOpen }) {
   const [percent, setPercent] = useState(null);
   const { setProduct } = useContext(AppContext);
   const [selectValue, setSelectValue] = useState(null);
-  const [selectedImage, setSelectedImage] = useState();
-  const [selectedImageUrl, setSelectedImageUrl] = useState("");
-
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
   const nowTimes = Date.now();
-
-  function handleChange(file) {
-    console.log(file[0].name);
-    const storageRef = ref(storage, `images/${file[0].name}`);
-    uploadBytes(storageRef, file[0]).then((snapshot) => {
-      console.log(snapshot);
-    });
-  }
-
-  function downloader() {
-    const storage = getStorage();
-    console.log(selectedImage);
-    return getDownloadURL(ref(storage, `images/${selectedImage}`))
-      .then((url) => {
-        console.log(url);
-        setSelectedImageUrl(url);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }
-  // console.log(selectedImageUrl);
-  useEffect(() => {
-    downloader();
-    // console.log(selectedImage);
-  }, [selectedImage]);
-
-  const onFinish = async () => {
-    try {
-      const docRef = await addDoc(
-        collection(firestore, `${userEmail.email}.product`),
-        {
-          quanty: 0,
-          select: selectValue,
-          time: nowTimes,
-          img: file,
-          ...form.getFieldsValue(),
-        }
-      );
-      setProduct((prevProduct) => [
-        ...prevProduct,
-        {
-          ...form.getFieldsValue(),
-          img: file,
-          select: selectValue,
-          id: docRef.id,
-        },
-      ]);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
-    setOpen(false);
-  };
 
   function handleChange(event) {
     setFile(event.target.files[0]);
@@ -108,6 +46,34 @@ export default function PraductCreate({ open, setOpen }) {
     );
   };
 
+  const onFinish = async () => {
+    handleUpload();
+    try {
+      const docRef = await addDoc(
+        collection(firestore, `${userEmail.email}.product`),
+        {
+          quanty: 0,
+          select: selectValue,
+          time: nowTimes,
+          img: file,
+          ...form.getFieldsValue(),
+        }
+      );
+      setProduct((prevProduct) => [
+        ...prevProduct,
+        {
+          ...form.getFieldsValue(),
+          img: file,
+          select: selectValue,
+          id: docRef.id,
+        },
+      ]);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    setOpen(false);
+  };
+
   return (
     <PraductCreateContainer>
       <Modal title="Create shop" centered open={open} width={800} footer={null}>
@@ -124,34 +90,16 @@ export default function PraductCreate({ open, setOpen }) {
               onFinish={onFinish}
             >
               <div className="form">
-                {/* <Form.Item>
-                  <div onClick={uploadImage}>
-                    <img
-                      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAAAYFBMVEXa2tpVVVXd3d1OTk5SUlJwcHC1tbVLS0uOjo7h4eGcnJxWVlbU1NRaWlphYWGnp6fHx8e8vLxra2umpqa5ubnOzs51dXWvr6+WlpaGhobDw8OAgIBkZGR7e3uQkJBERETECcahAAACeUlEQVR4nO3b6W6qQBiAYWaxw7gdxAXc2vu/y4qIgIKpQo7x433+lUaTeYPDDGIQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQffo3WN5jV7Go/74dw/nJXrsbH8+tYFRvZnQgAY0kNDAuE4kNLDp6quDxVxAA5P4LmsjP7cCGvzrtMajwTAb3G4NhtdAB7skWVdfMLgGOhqdroY2rBwaWgMd2fOA3aY8NrgGG5uviFz5mqE1WBeLaxtfhzywBnrliu3B7HpwaA12RQM7l/xZ0Kv9gyTzy3xgQsmfBR27sHU4epmfCNauBZ8HOnHKpa3j8Wl2C9KoRfkSeQ2Cw2lEbtx+Juy28SitLhTFNfD5ye6W7RG897UJQ1yDYHaZ85L6kB5Mk9Ia+LRYBP181SbKRfu7SGswVVd2URnU1O5bv0wT1sBvKzea3a48PUJj4mlLBFkN9Lp6r91OouJ45LKV4bo5grAGe6uqEYqFUL5btGbXGEFUg3I3cN0UnCPoL3NpkjSNU1QDP7LqNsJ5Eig2Cc1rJ0kNKhvjMsJpJvTj8rgL7z8OkhoE8e1pkP1vdLouVv52x7vlkqAG2WapgTlua2nur5GSGkyaEmQz4e0cEdUjyGng//w9vLWr2nDlNJjO/pggWyjUrpFiGujomccxajdZBtpAua3A+0hPNlBuc708SGrQsDp4wByKLZSgBmr2nMnssoUS0+B0YXhe/i6CGryMBlIaJL6Tg4AG9vgddvCdrzA/u4Hq+NC+ktCgFzSgAQ0+u0H60+2p/ZoPbRB1eWb/1qf+uK9P7x4MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPwHvzkNNPrHNmiDAAAAAElFTkSuQmCC"
-                      alt="rasim"
-                      className="profile_images"
-                    />
+                <Form.Item>
+                  <div className="wrapper">
                     <input
                       type="file"
-                      ref={inputRef}
-                      onChange={(e) => {
-                        setSelectValue(e.target.files);
-                      }}
-                      style={{ display: "none" }}
+                      accept="image/*"
+                      className="file_input"
+                      onChange={handleChange}
                     />
                   </div>
-                </Form.Item> */}
-
-                <input type="file" accept="image/*" onChange={handleChange} />
-                <button onClick={handleUpload}>Upload</button>
-
-                {/* <input
-                  type="file"
-                  onChange={(e) => {
-                    handleChange(e.target.files);
-                    setSelectedImage(e.target.files[0].name);
-                  }}
-                /> */}
+                </Form.Item>
 
                 <Form.Item
                   name="name"

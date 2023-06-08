@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Landing/Home";
 import About from "./pages/Landing/About";
 import Contact from "./pages/Landing/Contact";
@@ -12,10 +12,8 @@ import { AuthContextProvider } from "./context/AuthContext";
 import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import { firestore } from "./firebase/firebase";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
-  const navigate = useNavigate();
   const dataUsers = JSON.parse(localStorage.getItem("userData"));
   const [product, setProduct] = useState([]);
 
@@ -36,7 +34,7 @@ function App() {
         console.log(err.message);
       });
     onSnapshot(colRef);
-  });
+  }, [product]);
 
   if (!dataUsers.token) {
     return (

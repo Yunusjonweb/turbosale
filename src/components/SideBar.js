@@ -37,10 +37,10 @@ const { Header, Content, Sider } = Layout;
 const SideBar = () => {
   const { pathname } = useLocation();
   const [order, setOrder] = useState([]);
-  const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const str = pathname.slice();
   let result = str.charAt(1).toUpperCase() + str.slice(2);
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -102,7 +102,7 @@ const SideBar = () => {
     const quantity1 = productAdd.data().quantity;
     const filter = order.filter((filterItem) => filterItem.idd === item.id);
 
-    if (filter.length === 0) {
+    if (!filter.length || !order.length) {
       await addDoc(collection(firestore, `${userEmail.email}.basket`), {
         idd: id,
         img: img,

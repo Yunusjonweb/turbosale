@@ -3,7 +3,14 @@ import { Modal, Form, Input, Button } from "antd";
 import { FormContainer } from "../styles/components/FormStyles";
 import { SupplierUpdate } from "./SupplierUpdate";
 
-export default function SuppliearEdit({ open, setOpen, id }) {
+export default function SuppliearEdit({
+  open,
+  setOpen,
+  id,
+  name,
+  address,
+  quantityy,
+}) {
   const [form] = Form.useForm();
   const supplierName = Form.useWatch("supplierName", form);
   const adress = Form.useWatch("adress", form);
@@ -27,10 +34,11 @@ export default function SuppliearEdit({ open, setOpen, id }) {
   return (
     <div className="modal">
       <Modal
-        title="Maxsulotlarni malumotlarni taxirilash"
+        title="Supplier malumotlarni taxirilash"
         centered
         open={open}
         footer={null}
+        onCancel={handleCancel}
       >
         <FormContainer>
           <Form
@@ -39,6 +47,11 @@ export default function SuppliearEdit({ open, setOpen, id }) {
             style={{
               maxWidth: 600,
               height: 460,
+            }}
+            initialValues={{
+              supplierName: name,
+              adress: address,
+              quantity: quantityy,
             }}
             form={form}
             onFinish={onFinish}

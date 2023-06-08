@@ -7,6 +7,7 @@ const items = (
   name,
   phone,
   email,
+  status,
   deleteItem,
   addToBasket,
   open,
@@ -37,7 +38,7 @@ const items = (
         style={{ border: "none", boxShadow: "none", width: "100%" }}
         className="btn"
       >
-        <OrderEdit open={open} setOpen={setOpen} id={id} />
+        <OrderEdit open={open} setOpen={setOpen} id={id} statuss={status} />
       </li>
     ),
   },
@@ -82,6 +83,7 @@ export const OrderColumnsData = (deleteItem, addToBasket, open, setOpen) => [
             record?.id,
             record?.name,
             record?.email,
+            record?.status,
             record?.phone,
             deleteItem,
             addToBasket,

@@ -3,7 +3,14 @@ import InputMask from "react-input-mask";
 import { ClientsUpdate } from "./ClientsUpdate";
 import { FormContainer } from "../styles/components/FormStyles";
 
-export default function ClientsEdit({ open, setOpen, id }) {
+export default function ClientsEdit({
+  open,
+  setOpen,
+  id,
+  names,
+  emails,
+  phones,
+}) {
   const [form] = Form.useForm();
   const name = Form.useWatch("name", form);
   const email = Form.useWatch("email", form);
@@ -24,7 +31,13 @@ export default function ClientsEdit({ open, setOpen, id }) {
 
   return (
     <div className="modal">
-      <Modal title="Clients data edit" centered open={open} footer={null}>
+      <Modal
+        title="Clients data edit"
+        centered
+        open={open}
+        footer={null}
+        onCancel={handleCancel}
+      >
         <FormContainer>
           <Form
             layout="vertical"
@@ -32,6 +45,11 @@ export default function ClientsEdit({ open, setOpen, id }) {
             style={{
               maxWidth: 600,
               height: 300,
+            }}
+            initialValues={{
+              name: names,
+              email: emails,
+              phone: phones,
             }}
             form={form}
             onFinish={onFinish}
@@ -61,8 +79,8 @@ export default function ClientsEdit({ open, setOpen, id }) {
               hasFeedback
             >
               <InputMask
-                mask="+998 (99) 999-99-99"
                 maskChar={null}
+                mask="+998 (99) 999-99-99"
                 className="ant-input css-dev-only-do-not-override-k7429z"
               />
             </Form.Item>

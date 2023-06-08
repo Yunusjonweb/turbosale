@@ -4,7 +4,6 @@ import {
   UserOutlined,
   ImportOutlined,
   ShoppingCartOutlined,
-  DesktopOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 

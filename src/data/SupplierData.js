@@ -7,6 +7,8 @@ const items = (
   supplierName,
   img,
   adress,
+  phone,
+  quantity,
   deleteItem,
   addToBasket,
   open,
@@ -20,9 +22,10 @@ const items = (
         onClick={() =>
           addToBasket({
             id: id,
-            supplierName: supplierName,
             img: img,
             adress: adress,
+            supplierName: supplierName,
+            phone: phone,
           })
         }
       >
@@ -37,7 +40,15 @@ const items = (
         style={{ border: "none", boxShadow: "none", width: "100%" }}
         className="btn"
       >
-        <SuppliearEdit open={open} setOpen={setOpen} id={id} />
+        <SuppliearEdit
+          open={open}
+          setOpen={setOpen}
+          id={id}
+          address={adress}
+          phones={phone}
+          name={supplierName}
+          quantityy={quantity}
+        />
       </li>
     ),
   },
@@ -97,6 +108,8 @@ export const SupplierColumnsData = (deleteItem, addToBasket, open, setOpen) => [
             record?.id,
             record?.img,
             record?.adress,
+            record?.phone,
+            record?.quantity,
             record?.supplierName,
             deleteItem,
             addToBasket,

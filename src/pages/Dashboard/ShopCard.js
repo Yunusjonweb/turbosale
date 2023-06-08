@@ -21,7 +21,7 @@ export default function ShopCard() {
   const navigate = useNavigate();
   const goBack = () => navigate(-1);
   const [loader, setLoader] = useState(false);
-  const [basket, setBasket] = useState([]);
+  const { order, setOrder } = useContext(ProductContext);
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
@@ -35,7 +35,7 @@ export default function ShopCard() {
         snapshot.forEach((item) => {
           product.push({ ...item.data(), id: item.id });
         });
-        setBasket(product);
+        setOrder(product);
       })
       .catch((err) => {
         console.log(err.message);
@@ -85,7 +85,7 @@ export default function ShopCard() {
     await deleteDoc(doc(firestore, `${userEmail.email}.basket`, userId));
   };
 
-  const totalPrice = basket.reduce((sum, el) => {
+  const totalPrice = order.reduce((sum, el) => {
     return sum + el.salePrice * el.quanty;
   }, 0);
 
@@ -97,7 +97,7 @@ export default function ShopCard() {
         ) : (
           <Table
             columns={ShopCardData(plusHandle, minusHandle, deleteItem)}
-            dataSource={basket}
+            dataSource={order}
           />
         )}
         <h2 className="totalPrice_title">

@@ -30,7 +30,7 @@ export default function Praduct() {
 
   useEffect(() => {
     setFilter(product);
-  }, [product]);
+  }, []);
 
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
 
@@ -99,21 +99,22 @@ export default function Praduct() {
     if (value === "All") {
       return setFilter(product);
     } else {
-      const productFilter = filters.filter((item) => item.select === value);
+      const productFilter = product.filter((item) => {
+        return item.select.toLowerCase().includes(value.toLowerCase());
+      });
       setFilter(productFilter);
     }
   };
 
   const PriceFilter = () => {
-    const priceSort = filters.sort(
+    const priceSort = product.sort(
       (a, b) => parseFloat(a.salePrice) - parseFloat(b.salePrice)
     );
-    setFilter([...priceSort]);
+    setFilter(priceSort);
   };
 
   const LastAdded = () => {
-    const productLength = filters.slice(-1);
-    console.log(productLength);
+    const productLength = product.slice(-1);
     setFilter(productLength);
   };
 

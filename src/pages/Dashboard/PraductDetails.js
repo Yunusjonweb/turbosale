@@ -20,6 +20,8 @@ export default function PraductDetails() {
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
   const thisProduct = product.filter((prod) => prod.id === userId);
 
+  // console.log(thisProduct);
+
   let dateObj = new Date();
   let month =
     dateObj.getUTCMonth() + 1 < 10
@@ -96,6 +98,11 @@ export default function PraductDetails() {
                   modal2Open={modal2Open}
                   setModal2Open={setModal2Open}
                   id={item.id}
+                  name={item.name}
+                  orginalPrice={item.orginalPrice}
+                  salePrice={item.salePrice}
+                  textAreaa={item.textArea}
+                  quantityy={item.quantity}
                 />
                 <Popconfirm
                   title="Delete the product"

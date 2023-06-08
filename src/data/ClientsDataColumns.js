@@ -37,7 +37,14 @@ const items = (
         style={{ border: "none", boxShadow: "none", width: "100%" }}
         className="btn"
       >
-        <ClientsEdit open={open} setOpen={setOpen} id={id} />
+        <ClientsEdit
+          open={open}
+          setOpen={setOpen}
+          id={id}
+          names={name}
+          emails={email}
+          phones={phone}
+        />
       </li>
     ),
   },

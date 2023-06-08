@@ -2,10 +2,26 @@ import { UpdateData } from "./Update";
 import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
 import { FormContainer } from "../styles/components/FormStyles";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { firestore, storage } from "../firebase/firebase";
+import { useState } from "react";
+import { useEffect } from "react";
+import { doc, updateDoc } from "firebase/firestore";
 
-export default function EditModal({ modal2Open, setModal2Open, id }) {
+export default function EditModal({
+  modal2Open,
+  setModal2Open,
+  id,
+  name,
+  orginalPrice,
+  salePrice,
+  quantityy,
+  textAreaa,
+}) {
+  const [file, setFile] = useState(null);
+  const [percent, setPercent] = useState(null);
   const [form] = Form.useForm();
-  const name = Form.useWatch("name", form);
+  const names = Form.useWatch("name", form);
   const price = Form.useWatch("orginalPrice", form);
   const sale = Form.useWatch("salePrice", form);
   const quantity = Form.useWatch("quantity", form);
@@ -15,20 +31,62 @@ export default function EditModal({ modal2Open, setModal2Open, id }) {
     setModal2Open(false);
   };
 
-  const onFinish = () => {
-    UpdateData(name, price, sale, quantity, textArea, id);
-    setModal2Open(false);
-  };
-
   const showModal = () => {
     setModal2Open(true);
   };
+
+  function handleChange(event) {
+    setFile(event.target.files[0]);
+  }
+
+  const handleUpload = () => {
+    if (!file) {
+      alert("Please upload an image first!");
+    }
+    const storageRef = ref(storage, `/files/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const percent = Math.round(
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+        setPercent(percent);
+      },
+      (err) => console.log(err),
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          console.log(url);
+          setFile(url);
+        });
+      }
+    );
+  };
+
+  const onFinish = () => {
+    handleUpload();
+    UpdateData(names, price, sale, quantity, textArea, file, id);
+    setModal2Open(false);
+  };
+
+  useEffect(() => {
+    const userEmail = JSON.parse(localStorage.getItem("userEmail"));
+    const product = doc(firestore, `${userEmail.email}.product`, id);
+    const fileUploader = async () => {
+      await updateDoc(product, {
+        img: file,
+      });
+    };
+    fileUploader();
+  }, [file]);
 
   return (
     <div className="modal">
       <Modal
         title="Maxsulotlarni malumotlarni taxirilash"
         centered
+        onCancel={handleCancel}
         open={modal2Open}
         footer={null}
       >
@@ -40,9 +98,20 @@ export default function EditModal({ modal2Open, setModal2Open, id }) {
               maxWidth: 600,
               height: 490,
             }}
+            initialValues={{
+              name: name,
+              quantity: quantityy,
+              orginalPrice: orginalPrice,
+              salePrice: salePrice,
+              quantityy: quantityy,
+              textArea: textAreaa,
+            }}
             form={form}
             onFinish={onFinish}
           >
+            <Form.Item label="Mahsulot img" name={"img"}>
+              <input type="file" accept="image/*" onChange={handleChange} />
+            </Form.Item>
             <Form.Item
               label="Mahsulot nomi"
               name={"name"}

@@ -42,7 +42,13 @@ export default function ClientsModal({ modal2Open, setModal2Open }) {
 
   return (
     <div className="modal">
-      <Modal title="Add a Client" centered open={modal2Open} footer={null}>
+      <Modal
+        title="Add a Client"
+        centered
+        open={modal2Open}
+        footer={null}
+        onCancel={handleCancel}
+      >
         <FormContainer>
           <Form
             layout="vertical"

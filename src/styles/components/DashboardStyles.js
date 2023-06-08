@@ -69,6 +69,12 @@ export const DashboardContainer = styled.div`
     text-align: center;
   }
 
+  .product_statistic {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
   .charts_vertical,
   .charts_simple {
     width: 480px;

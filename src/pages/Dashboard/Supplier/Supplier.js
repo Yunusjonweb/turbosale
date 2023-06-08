@@ -49,8 +49,6 @@ const Supplier = () => {
     setFilter(supplier);
   }, [supplier]);
 
-  // console.log(supplier);
-
   const deleteItem = async (userId) => {
     await deleteDoc(doc(firestore, `${userEmail.email}.supplier`, userId));
   };
@@ -80,6 +78,7 @@ const Supplier = () => {
             <Input
               value={search}
               placeholder="Search"
+              type={"text"}
               onChange={(e) => setSearch(e.target.value)}
               prefix={<SearchOutlined />}
             />
