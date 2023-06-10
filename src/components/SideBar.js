@@ -200,7 +200,7 @@ const SideBar = () => {
             >
               <ProductContext.Provider value={{ order, setOrder, addToBasket }}>
                 <Routes>
-                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/" element={<Dashboard />} />
                   <Route path="/praducts" element={<Praduct />} />
                   <Route path="/sales" element={<Sales />} />
                   <Route path="/clients" element={<Clients />} />

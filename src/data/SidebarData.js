@@ -8,7 +8,7 @@ export const SiderBarData = [
   {
     id: 1,
     title: "Dashboard",
-    link: "/dashboard",
+    link: "/",
     icon: <AppstoreOutlined style={{ fontSize: "20px" }} />,
   },
   {
