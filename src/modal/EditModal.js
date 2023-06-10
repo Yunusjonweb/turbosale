@@ -2,7 +2,13 @@ import { UpdateData } from "./Update";
 import { EditOutlined } from "@ant-design/icons";
 import { Modal, Form, Input, Button } from "antd";
 import { FormContainer } from "../styles/components/FormStyles";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
 import { firestore, storage } from "../firebase/firebase";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -26,7 +32,8 @@ export default function EditModal({
   const sale = Form.useWatch("salePrice", form);
   const quantity = Form.useWatch("quantity", form);
   const textArea = Form.useWatch("textArea", form);
-
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const handleCancel = () => {
     setModal2Open(false);
   };
@@ -35,51 +42,33 @@ export default function EditModal({
     setModal2Open(true);
   };
 
-  function handleChange(event) {
-    setFile(event.target.files[0]);
+  function imgUploader(file) {
+    const storage = getStorage();
+    const storageRef = ref(storage, `images/${file[0].name}`);
+    uploadBytes(storageRef, file[0]).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  }
+  useEffect(() => {
+    downloader();
+  }, [selectedImage]);
+
+  function downloader() {
+    const storage = getStorage();
+    console.log(selectedImage);
+    return getDownloadURL(ref(storage, `images/${selectedImage}`))
+      .then((url) => {
+        setSelectedImageUrl(url);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 
-  const handleUpload = () => {
-    if (!file) {
-      alert("Please upload an image first!");
-    }
-    const storageRef = ref(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-          setFile(url);
-        });
-      }
-    );
-  };
-
   const onFinish = () => {
-    handleUpload();
-    UpdateData(names, price, sale, quantity, textArea, file, id);
+    UpdateData(names, price, sale, quantity, textArea, selectedImageUrl, id);
     setModal2Open(false);
   };
-
-  useEffect(() => {
-    const userEmail = JSON.parse(localStorage.getItem("userEmail"));
-    const product = doc(firestore, `${userEmail.email}.product`, id);
-    const fileUploader = async () => {
-      await updateDoc(product, {
-        img: file,
-      });
-    };
-    fileUploader();
-  }, [file]);
 
   return (
     <div className="modal">
@@ -110,7 +99,14 @@ export default function EditModal({
             onFinish={onFinish}
           >
             <Form.Item label="Mahsulot img" name={"img"}>
-              <input type="file" accept="image/*" onChange={handleChange} />
+              {/* <input type="file" accept="image/*" onChange={handleChange} /> */}
+              <input
+                type="file"
+                onChange={(event) => {
+                  setSelectedImage(event.target.files[0].name);
+                  imgUploader(event.target.files);
+                }}
+              />
             </Form.Item>
             <Form.Item
               label="Mahsulot nomi"

@@ -7,12 +7,13 @@ export async function UpdateData(
   sale,
   quantity,
   textArea,
-  file,
+  selectedImageUrl,
   id
 ) {
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
   const praduct = doc(firestore, `${userEmail.email}.product`, id);
   await updateDoc(praduct, {
+    img: selectedImageUrl,
     name: names,
     price: price,
     sale: sale,

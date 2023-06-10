@@ -1,53 +1,64 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Form, Input, Select, Modal, Button } from "antd";
 import { PraductCreateContainer } from "../styles/components/PraductCreateStyles";
 import { AppContext } from "../context/ContextProvider";
 import { collection, addDoc } from "firebase/firestore";
-import { firestore, storage } from "../firebase/firebase";
+import { firestore } from "../firebase/firebase";
 import { FormContainer } from "../styles/components/FormStyles";
-import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 const { TextArea } = Input;
 
 export default function PraductCreate({ open, setOpen }) {
   const [form] = Form.useForm();
-  const [file, setFile] = useState(null);
-  const [percent, setPercent] = useState(null);
   const { setProduct } = useContext(AppContext);
   const [selectValue, setSelectValue] = useState(null);
   const userEmail = JSON.parse(localStorage.getItem("userEmail"));
-
+  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImageUrl, setSelectedImageUrl] = useState("");
   const nowTimes = Date.now();
 
-  function handleChange(event) {
-    setFile(event.target.files[0]);
+  function imgUploader(file) {
+    const storage = getStorage();
+    const storageRef = ref(storage, `images/${file[0].name}`);
+
+    uploadBytes(storageRef, file[0]).then((snapshot) => {
+      console.log("Uploaded a blob or file!");
+    });
+  }
+  useEffect(() => {
+    downloader();
+  }, [selectedImage]);
+
+  function downloader() {
+    const storage = getStorage();
+    const desertRef = ref(storage, `images/${selectedImage}`);
+
+    // Delete the file
+    deleteObject(desertRef)
+      .then(() => {
+        // File deleted successfully
+      })
+      .catch((error) => {
+        // Uh-oh, an error occurred!
+      });
+    console.log(selectedImage);
+    return getDownloadURL(ref(storage, `images/${selectedImage}`))
+      .then((url) => {
+        console.log(url);
+        setSelectedImageUrl(url);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   }
 
-  const handleUpload = () => {
-    if (!file) {
-      alert("Please upload an image first!");
-    }
-    const storageRef = ref(storage, `/files/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const percent = Math.round(
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-        );
-        setPercent(percent);
-      },
-      (err) => console.log(err),
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          setFile(url);
-        });
-      }
-    );
-  };
-
   const onFinish = async () => {
-    handleUpload();
     try {
       const docRef = await addDoc(
         collection(firestore, `${userEmail.email}.product`),
@@ -55,7 +66,7 @@ export default function PraductCreate({ open, setOpen }) {
           quanty: 0,
           select: selectValue,
           time: nowTimes,
-          img: file,
+          img: selectedImageUrl,
           ...form.getFieldsValue(),
         }
       );
@@ -63,7 +74,7 @@ export default function PraductCreate({ open, setOpen }) {
         ...prevProduct,
         {
           ...form.getFieldsValue(),
-          img: file,
+          img: selectedImageUrl,
           select: selectValue,
           id: docRef.id,
         },
@@ -94,13 +105,14 @@ export default function PraductCreate({ open, setOpen }) {
                   <div className="wrapper">
                     <input
                       type="file"
-                      accept="image/*"
                       className="file_input"
-                      onChange={handleChange}
+                      onChange={(event) => {
+                        setSelectedImage(event.target.files[0].name);
+                        imgUploader(event.target.files);
+                      }}
                     />
                   </div>
                 </Form.Item>
-
                 <Form.Item
                   name="name"
                   label="Mahsulot nomi"
